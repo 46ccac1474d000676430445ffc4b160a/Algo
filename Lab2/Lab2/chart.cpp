@@ -1,7 +1,10 @@
 #include "chart.h"
 
 Chart::Chart(double leftBorder, double rightBorder, double step, const QString &f) :
-    LeftBorder(leftBorder), RightBorder(rightBorder), Step(step), func(f)
+    func(f),
+    LeftBorder(leftBorder),
+    RightBorder(rightBorder),
+    Step(step)
 {
     repaint();
 }
@@ -26,15 +29,23 @@ void Chart::repaint()
 
     QString fun = formulaClean(func);
 
+    double min = eng.evaluate(fun.arg(LeftBorder)).toNumber();
+    double max = min;
     for (double x = LeftBorder; x <= RightBorder; x+=Step)
     {
-        ser->append(x, eng.evaluate(fun.arg(x)).toNumber());
+        double y = eng.evaluate(fun.arg(x)).toNumber();
+        ser->append(x, y);
+
+        if (y < min) min = y;
+        if (y > max) max = y;
     }
+    max = (qAbs(max) > qAbs(min)) ? qAbs(max) : qAbs(min);
 
     if (series().isEmpty()) addSeries(ser);
 
     createDefaultAxes();
     static_cast<QValueAxis*>(axisX(ser))->setRange(LeftBorder, RightBorder);
+    static_cast<QValueAxis*>(axisY(ser))->setRange(-max-0.5, max+0.5);
     static_cast<QValueAxis*>(axisX(ser))->setTitleText("X-coord");
     static_cast<QValueAxis*>(axisY(ser))->setTitleText("Y-coord");
     static_cast<QValueAxis*>(axisX(ser))->setTickCount(19);

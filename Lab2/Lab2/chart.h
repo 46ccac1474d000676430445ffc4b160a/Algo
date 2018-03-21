@@ -22,15 +22,15 @@ class Chart : public QChart
 public:
     Chart(double leftBorder, double rightBorder, double step, const QString &f);
 
+    double leftBorder() const;
+    double rightBorder() const;
+
+public slots:
+    void setLeftBorder(double value);
+    void setRightBorder(double value);
+    void setF(const QString &s);
     void repaint();
 
-    double leftBorder() const;
-    void setLeftBorder(double value);
-
-    double rightBorder() const;
-    void setRightBorder(double value);
-
-    void setF(const QString &s);
 };
 
 #endif // CHART_H

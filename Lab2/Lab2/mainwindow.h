@@ -11,6 +11,8 @@
 #include <QToolButton>
 #include <QLineEdit>
 
+#include <QScrollBar>
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
@@ -20,10 +22,10 @@
 
 #include <QMessageBox>
 
+#include <QStyle>
+
 #include "chart.h"
 #include "formulaclean.h"
-
-#include "QDebug"
 
 using namespace QtCharts;
 
@@ -37,7 +39,8 @@ class MainWindow : public QWidget
 
     QTextBrowser *outputField;
 
-    QToolButton *startBut;
+    QToolButton *startBut,
+                *updateBut;
 
     QLineEdit *function;
     QString lastFunc;
