@@ -9,16 +9,16 @@ MainWindow::MainWindow(QWidget *parent) :
     rightUserBorder = new QDoubleSpinBox();
     epsilon=  new QDoubleSpinBox();
 
-    leftBorder->setRange(-100., 100.);
-    rightBorder->setRange(-100., 100.);
+    leftBorder->setRange(-100., 10.);
+    rightBorder->setRange(-10., 100.);
     leftBorder->setValue(-10.);
     rightBorder->setValue(10.);
-    leftUserBorder->setRange(-100., 100.);
-    rightUserBorder->setRange(-100., 100.);
     leftUserBorder->setRange(leftBorder->value(), rightBorder->value());
     rightUserBorder->setRange(leftBorder->value(), rightBorder->value());
-    epsilon->setDecimals(9);
-    epsilon->setRange(0.000000001, 1);
+    leftUserBorder->setValue(leftBorder->value());
+    rightUserBorder->setValue(rightBorder->value());
+    epsilon->setDecimals(12);
+    epsilon->setRange(1e-12, 1.);
     epsilon->setValue(0.001);
     epsilon->setMaximumWidth(200);
     leftBorder->setToolTip("Левая граница графика функции");
@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     rightUserBorder->setToolTip("Правая граница вычислений X");
     epsilon->setToolTip("Точность вычислений");
 
-    function = new QLineEdit("$cos(x) * $sin(x)");
+    function = new QLineEdit("x + $cos(x) * 2.5");
     function->setMaximumWidth(160);
     function->setToolTip("Функция от X, например $cos(x) / 7.35 или $pow(x, 2) * $cos(x*$E)\n"
                          "(Использование \"$\" для тригонометрических и встроенных функций обязательно)\n"
@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
                          );
     lastFunc = function->text();
 
-    chart = new Chart(leftBorder->value(), rightBorder->value(), 0.25, function->text());
+    chart = new Chart(leftBorder->value(), rightBorder->value(), 0.5, function->text());
 
     chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
@@ -65,7 +65,9 @@ MainWindow::MainWindow(QWidget *parent) :
     outputField->setFont(QFont("Monospace"));
 
     startBut = new QToolButton();
+
     startBut->setIcon(QIcon(QPixmap(":/run.ico")));
+
     startBut->setIconSize(QSize(110, 110));
     startBut->setToolTip("Запустить выполнение алгоритма");
 
@@ -75,14 +77,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     connect(leftBorder, static_cast<void(QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), [=](double var){
-        rightBorder->setMinimum(var+1);
+        rightBorder->setMinimum(var);
         leftUserBorder->setMinimum(var);
         chart->setLeftBorder(var);
     });
 
      connect(rightBorder,
              static_cast<void(QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), [=](double var){
-         leftBorder->setMaximum(var-1);
+         leftBorder->setMaximum(var);
          rightUserBorder->setMaximum(var);
          chart->setRightBorder(var);
      });
@@ -145,7 +147,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::onFunctionEditingFinished()
 {
-    if (chart->series().size() > 1) static_cast<QSplineSeries*>(chart->series()[1])->clear();
+    if (chart->series().size() > 1)
+    {
+        QSplineSeries *series = static_cast<QSplineSeries*>(chart->series()[1]);
+        delete series;
+    }
 
     function->clearFocus();
     QString func = function->text();
@@ -181,7 +187,11 @@ void MainWindow::runAlgo()
         return;
     }
 
-    outputField->append("Фунцкия: <span style='color: red'>" + function->text().append("</span>\n"));
+    outputField->append(
+                QString("Фунцкия: <span style='color: red'>%1</span><br>"
+                        "Tочность: <span style='color: red'>%2</span>")
+                        .arg(function->text())
+                        .arg(epsilon->value(), 0, 'e', 0));
 
 #define f(x) eng.evaluate(func.arg(x)).toNumber()
 
@@ -197,18 +207,18 @@ void MainWindow::runAlgo()
         "<span style='color: green'>right: </span>%3  "
         "<span style='color: green'>mid: </span>%4"
         "</pre>"
-        ).arg(i++).arg(a1, 0, 'g', 7).arg(a2, 0, 'g', 7).arg(mid, 0, 'g', 7));
+        ).arg(i++).arg(a1, 0, 'g', 15).arg(a2, 0, 'g', 15).arg(mid, 0, 'g', 15));
 
-        if( f(a2) * f(mid) < 0)
+        if( f(a2) * f(mid) < 0.)
             a1 = mid;
         else
             a2 = mid;
     }
 #undef f
 
-    mid = (a1 + a2) / 2;
+    mid = (a1 + a2) / 2.;
 
-    outputField->append(QString("<span style='color: red'>Вычисленное значение:</span> %1<br>").arg(mid, 0, 'g', 7));
+    outputField->append(QString("<span style='color: red'>Вычисленное значение:</span> %1<br>").arg(mid, 0, 'g', 15));
 
     outputField->verticalScrollBar()->setValue(outputField->verticalScrollBar()->maximum());
 
@@ -217,6 +227,7 @@ void MainWindow::runAlgo()
     {
         dot = static_cast<QLineSeries*>(chart->series().at(1));
         dot->clear();
+        dot->setName(QString("Dot: x = %1, y = 0").arg(mid));
     }
     else
     {
@@ -226,7 +237,7 @@ void MainWindow::runAlgo()
         chart->addSeries(dot);
     }
 
-    dot->append(mid-0.001, 0.);
-    dot->append(mid+0.001, 0.);
+    dot->append(mid-0.0001, 0.);
+    dot->append(mid+0.0001, 0.);
     chart->repaint();
 }

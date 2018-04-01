@@ -17,6 +17,7 @@
 #include <QHBoxLayout>
 
 #include <QBitmap>
+#include <QDir>
 
 #include <QScriptEngine>
 

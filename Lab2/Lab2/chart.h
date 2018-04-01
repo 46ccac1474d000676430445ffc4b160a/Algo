@@ -14,6 +14,8 @@ using namespace QtCharts;
 
 class Chart : public QChart
 {
+    Q_OBJECT
+
     QString func;
     double LeftBorder;
     double RightBorder;

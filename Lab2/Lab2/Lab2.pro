@@ -26,8 +26,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    chart.cpp \
-    formulaclean.cpp
+    formulaclean.cpp \
+    chart.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -35,6 +35,4 @@ HEADERS += \
     formulaclean.h
 
 RESOURCES += \
-    res.qrc
-
-DISTFILES +=
+    rec.qrc

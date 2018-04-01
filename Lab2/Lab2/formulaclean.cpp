@@ -3,5 +3,5 @@
 QString formulaClean(const QString &f)
 {
     QString func = f;
-    return func.replace("$", "Math.").replace("exp", "#").replace("x", "%1", Qt::CaseInsensitive).replace("#", "exp");;
+    return func.replace("$", "Math.").replace("exp", "#").replace("x", "%1", Qt::CaseInsensitive).replace("#", "exp");
 }
