@@ -2,16 +2,25 @@
 #define DRAWWIDGET_H
 
 #include <QWidget>
+#include <QPainter>
+#include <QStyleFactory>
+#include <QConicalGradient>
 
-class DrawWidget : public QWidget
+class FractalWidget : public QWidget
 {
     Q_OBJECT
+
+    int m_power;
+
+    void paintEvent(QPaintEvent *event);
+
+    void fractal(QPainter &p, const QPointF &a, const QPointF &e, int n);
+
 public:
-    explicit DrawWidget(QWidget *parent = nullptr);
+    explicit FractalWidget(QWidget *parent = nullptr);
 
-signals:
-
-public slots:
+    int power() const;
+    void setPower(int power);
 };
 
 #endif // DRAWWIDGET_H

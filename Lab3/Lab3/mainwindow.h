@@ -1,9 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QSpinBox>
+#include <QSlider>
 
-class MainWindow : public QMainWindow
+#include "fractalwidget.h"
+
+class MainWindow : public QWidget
 {
     Q_OBJECT
 
