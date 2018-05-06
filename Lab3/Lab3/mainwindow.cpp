@@ -10,7 +10,7 @@ void MainWindow::updateScene()
     m_view->addKoch(p1, p2, m_powerSpin->value());
 
     m_view->scene()->addEllipse(p1.x()-2.5, p1.y()-2.5, 5., 5., QPen(QColor(255, 0, 0)), QBrush(QColor(255, 0, 0)))->setToolTip("Point 1");
-    m_view->scene()->addEllipse(p2.x()-2.5, p2.y()-2.5, 5., 5., QPen(QColor(0, 255, 0)), QBrush(QColor(0, 255, 0)))->setToolTip("Point 1");
+    m_view->scene()->addEllipse(p2.x()-2.5, p2.y()-2.5, 5., 5., QPen(QColor(0, 255, 0)), QBrush(QColor(0, 255, 0)))->setToolTip("Point 2");
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -152,7 +152,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
 
-    powerUpEnable->setToolTip("<pre>Enable to increase power up to 10 (default limit is 5).\n</pre><pre style='color: red'>Not recommended. It can cause the program to stop</pre>");
+    powerUpEnable->setToolTip("<pre>Enable to increase power up to 10 (default limit is 5).\n</pre><pre style='color: red'>Not recommended. It can cause the program to stop.</pre>");
     connect(powerUpEnable, &QCheckBox::toggled, [=](bool val) -> void {
         if (val)
         {
