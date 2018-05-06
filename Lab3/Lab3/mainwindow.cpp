@@ -16,6 +16,7 @@ void MainWindow::updateScene()
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent, Qt::Window)
 {
+    m_label = new QLabel("<pre style='color: red'>Lines drawn:\n0</pre>");
     m_powerSlider = new QSlider(Qt::Horizontal);
     m_powerSpin = new QSpinBox();
     m_widthSpin = new QDoubleSpinBox();
@@ -29,6 +30,10 @@ MainWindow::MainWindow(QWidget *parent)
     auto powerUpEnable = new QCheckBox("&Enable\nhigher\npower");
 
 //SETUP
+
+    connect(m_view, &GraphicsView::linesCounted, [=](int val) -> void {
+        m_label->setText(QString("<pre style='color: red'>Lines drawn:\n%1</pre>").arg(val));
+    });
 
     m_powerSlider->setRange(-5, 5);
     m_powerSlider->setSingleStep(1);
@@ -64,6 +69,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_view->setDotTracking(true);
     m_view->setToolTip("Choose first point");
 
+    auto saveBut = new QPushButton("&Save to SVG");
+    connect(saveBut, &QPushButton::clicked, m_view, &GraphicsView::saveToSVG);
+
     auto repaintAct = new QAction("&Repaint");
     auto clearAct = new QAction("&Clear");
     auto saveToSVGAct = new QAction("&Save to SVG");
@@ -71,10 +79,24 @@ MainWindow::MainWindow(QWidget *parent)
     connect(repaintAct, &QAction::triggered, this, &MainWindow::updateScene);
     connect(clearAct, &QAction::triggered, [=]() -> void {
         m_view->scene()->clear();
+
+        m_label->setText("<pre style='color: red'>Lines drawn:\n0</pre>");
+
+        m_x1Spin->blockSignals(true);
+        m_y1Spin->blockSignals(true);
+        m_x2Spin->blockSignals(true);
+        m_y2Spin->blockSignals(true);
+
         m_x1Spin->setValue(1);
         m_y1Spin->setValue(1);
         m_x2Spin->setValue(1);
         m_y2Spin->setValue(1);
+
+        m_x1Spin->blockSignals(false);
+        m_y1Spin->blockSignals(false);
+        m_x2Spin->blockSignals(false);
+        m_y2Spin->blockSignals(false);
+
         m_index = 0;
     });
     connect(saveToSVGAct, &QAction::triggered, m_view, &GraphicsView::saveToSVG);
@@ -89,8 +111,14 @@ MainWindow::MainWindow(QWidget *parent)
         m_index++;
         if (m_index == 1)
         {
+            m_x1Spin->blockSignals(true);
+            m_y1Spin->blockSignals(true);
+
             m_x1Spin->setValue(p.x());
             m_y1Spin->setValue(p.y());
+
+            m_x1Spin->blockSignals(false);
+            m_y1Spin->blockSignals(false);
 
             m_view->setToolTip("Choose second point");
 
@@ -99,8 +127,14 @@ MainWindow::MainWindow(QWidget *parent)
         }
         else if (m_index == 2)
         {
+            m_x2Spin->blockSignals(true);
+            m_y2Spin->blockSignals(true);
+
             m_x2Spin->setValue(p.x());
             m_y2Spin->setValue(p.y());
+
+            m_x2Spin->blockSignals(false);
+            m_y2Spin->blockSignals(false);
 
             m_view->setToolTip("Choose first point");
 
@@ -118,7 +152,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
 
-    powerUpEnable->setToolTip("Can be risky");
+    powerUpEnable->setToolTip("<pre>Enable to increase power up to 10 (default limit is 5).\n</pre><pre style='color: red'>Not recommended. It can cause the program to stop</pre>");
     connect(powerUpEnable, &QCheckBox::toggled, [=](bool val) -> void {
         if (val)
         {
@@ -162,6 +196,8 @@ MainWindow::MainWindow(QWidget *parent)
     powerBox->setLayout(vPwLay);
 
     auto vSpBxLay = new QVBoxLayout();
+    vSpBxLay->addWidget(saveBut);
+    vSpBxLay->addWidget(m_label);
     vSpBxLay->addWidget(p1Box);
     vSpBxLay->addWidget(p2Box);
     vSpBxLay->addWidget(widthBox);

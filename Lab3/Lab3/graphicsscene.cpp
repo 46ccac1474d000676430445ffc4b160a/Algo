@@ -7,32 +7,12 @@ QGraphicsScene *GraphicsView::scene() const
 
 void GraphicsView::addKoch(const QPointF &a, const QPointF &e, int n)
 {
-    if (n)
-    {
-        qreal lineX = e.x() - a.x();
-        qreal lineY = e.y() - a.y();
-
-        QPointF b(a.x() + lineX / 3.,
-                  a.y() + lineY / 3.);
-
-        const qreal cos60 = 0.5;
-        const qreal sin60 = n > 0 ? -0.866666 : 0.866666;  // знак меняет направление выпуклой стороны
-
-        QPointF c(b.x() + (lineX/3.)*cos60 - (lineY/3.)*sin60,
-                  b.y() + (lineX/3.)*sin60 + (lineY/3.)*cos60);
-
-        QPointF d(e.x() - lineX / 3.,
-                  e.y() - lineY / 3.);
-
-        addKoch(a, b, n > 0 ? n - 1 : n + 1);
-        addKoch(b, c, n > 0 ? n - 1 : n + 1);
-        addKoch(c, d, n > 0 ? n - 1 : n + 1);
-        addKoch(d, e, n > 0 ? n - 1 : n + 1);
-    }
-    else
-    {
-        m_scene->addLine(QLineF(a, e), m_pen);
-    }
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    static int counter = 0;
+    privateAddKoch(a, e, n, counter);
+    QApplication::restoreOverrideCursor();
+    emit linesCounted(counter);
+    counter = 0;
 }
 
 void GraphicsView::setPenWidth(qreal width)
@@ -66,6 +46,7 @@ void GraphicsView::saveToSVG()
         QPainter painter;
         painter.begin(&gen);
 
+        painter.fillRect(gen.viewBox(), QBrush(QColor(42, 42, 42)));
         m_scene->render(&painter);
 
         painter.end();
@@ -88,6 +69,37 @@ void GraphicsView::resizeEvent(QResizeEvent *event)
     emit widgetSizeChanged(QSize(width(), height()));
 
     QGraphicsView::resizeEvent(event);
+}
+
+void GraphicsView::privateAddKoch(const QPointF &a, const QPointF &e, int n, int &counter)
+{
+    if (n)
+    {
+        qreal lineX = e.x() - a.x();
+        qreal lineY = e.y() - a.y();
+
+        QPointF b(a.x() + lineX / 3.,
+                  a.y() + lineY / 3.);
+
+        const qreal cos60 = 0.5;
+        const qreal sin60 = n > 0 ? -0.866666 : 0.866666;  // знак меняет направление выпуклой стороны
+
+        QPointF c(b.x() + (lineX/3.)*cos60 - (lineY/3.)*sin60,
+                  b.y() + (lineX/3.)*sin60 + (lineY/3.)*cos60);
+
+        QPointF d(e.x() - lineX / 3.,
+                  e.y() - lineY / 3.);
+
+        privateAddKoch(a, b, n > 0 ? n - 1 : n + 1, counter);
+        privateAddKoch(b, c, n > 0 ? n - 1 : n + 1, counter);
+        privateAddKoch(c, d, n > 0 ? n - 1 : n + 1, counter);
+        privateAddKoch(d, e, n > 0 ? n - 1 : n + 1, counter);
+    }
+    else
+    {
+        m_scene->addLine(QLineF(a, e), m_pen);
+        counter++;
+    }
 }
 
 GraphicsView::GraphicsView(QWidget *parent) :

@@ -30,6 +30,8 @@ class GraphicsView : public QGraphicsView
 
     void resizeEvent(QResizeEvent *event);
 
+    void privateAddKoch(const QPointF &a, const QPointF &e, int n, int &counter);
+
 public:
     explicit GraphicsView(QWidget *parent = nullptr);
 
@@ -55,9 +57,10 @@ public slots:
     void saveToSVG();
 
 signals:
-    void dotTrackingChanged(bool dotTracking);
+    void dotTrackingChanged(bool);
     void dotTracked(const QPoint &);
     void widgetSizeChanged(const QSize &);
+    void linesCounted(int);
 
 };
 

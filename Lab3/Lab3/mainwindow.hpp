@@ -10,6 +10,7 @@
 #include <QSlider>
 #include <QPushButton>
 #include <QGroupBox>
+#include <QLabel>
 
 #include <QGraphicsEllipseItem>
 
@@ -23,6 +24,7 @@ class MainWindow : public QWidget
 
     GraphicsView *m_view;
 
+    QLabel *m_label;
     QSlider *m_powerSlider;
     QSpinBox *m_powerSpin;
     QDoubleSpinBox *m_widthSpin;
