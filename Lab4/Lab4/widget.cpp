@@ -9,7 +9,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     ui->searchFormData->setIcon(QIcon(":/find.png"));
+    ui->searchFormData->setShortcut(QKeySequence("return"));
     ui->searchFormData_2->setIcon(QIcon(":/find.png"));
+    ui->searchFormData_2->setShortcut(QKeySequence("return"));
 
     connect(ui->listWidget_2, &QListWidget::itemDoubleClicked, this, &MainWindow::on_listWidget_itemDoubleClicked);
 

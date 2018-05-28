@@ -73,27 +73,13 @@ class StructGenerator : public QObject
 {
     Q_OBJECT
 
-    static QString rndstr()
-    {
-        QString str;
-
-        int rn  = 5 + qrand() % 5;
-
-        for (int i = 0; i < rn; i++)
-        {
-            str.append(char( 97 + qrand() % 26 ));
-        }
-
-        return str;
-    }
-
     static QString rndname()
     {
         static int id = 1;
 
         return QString("%1 %2  id%3")
-                .arg(last_names[qrand()%503])
-                .arg(names[qrand()%615])
+                .arg(last_names[qrand()%LNAMES_C])
+                .arg(names[qrand()%NAMES_C])
                 .arg(id++);
     }
 
@@ -106,8 +92,12 @@ class StructGenerator : public QObject
                             int gr, // Groups
                             int wo) // Workers
     {
+        ci = ci > CITIES_C ? CITIES_C : ci;
+        br = br > BRANCHES_C ? BRANCHES_C : br;
+        de = de > DEPARTMENTS_C ? DEPARTMENTS_C : de;
+
         int c_size = ci * br * de * gr * wo;
-        int percent = c_size / 100;
+        int percent = (c_size / 100) == 0 ? 1 : c_size / 100;
         int counter = 0;
 
         HashTable<City> cities;
@@ -117,7 +107,7 @@ class StructGenerator : public QObject
         {
             HashTable<Branch> branches;
 
-            QString cityName = QString("C_%1").arg(rndstr());
+            QString cityName = g_cities[CITIES_C - ci - 1];
 
 #ifdef local_struct_debug
             qDebug() << "CITY * * *" << cityName << endl;
@@ -128,7 +118,7 @@ class StructGenerator : public QObject
             {
                 HashTable<Department> departments;
 
-                QString brName = QString("B_%1").arg(rndstr());
+                QString brName = QString("%1 филиал").arg(g_branches[BRANCHES_C - b - 1]);
 
 #ifdef local_struct_debug
                 qDebug() << "BRANCH * * *" << brName << endl;
@@ -139,7 +129,7 @@ class StructGenerator : public QObject
                 {
                     HashTable<Group> groups;
 
-                    QString depName = QString("D_%1").arg(rndstr());
+                    QString depName = g_departments[DEPARTMENTS_C - d - 1];
 
 #ifdef local_struct_debug
                     qDebug() << "DEPARTMENT * * *" << depName << endl;
@@ -150,7 +140,7 @@ class StructGenerator : public QObject
                     {
                         QStringList workers;
 
-                        QString grName = QString("G_%1").arg(rndstr());
+                        QString grName = QString("Группа %1").arg(gr - g);
 
 #ifdef local_struct_debug
                         qDebug() << "GROUP * * *" << grName << endl;
