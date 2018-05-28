@@ -1,11 +1,15 @@
 #include "dialog.hpp"
 #include "ui_dialog.h"
+#include "structures/structure.hpp"
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
+
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &Dialog::accept);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &Dialog::reject);
 }
 
 Dialog::~Dialog()
@@ -13,7 +17,7 @@ Dialog::~Dialog()
     delete ui;
 }
 
-inline int Dialog::citiesCount() const
+int Dialog::citiesCount() const
 {
     return ui->citySpin->value();
 }
@@ -33,32 +37,7 @@ int Dialog::groupsCount() const
     return ui->groupSpin->value();
 }
 
-int Dialog::dialog(QWidget *parent, Counts &counts)
+int Dialog::workersCount() const
 {
-    Dialog *d = new Dialog(parent);
-    d->show();
-
-    int ret = d->exec();
-
-    counts.cities = d->ui->citySpin->value();
-    counts.branches = d->ui->branchSpin->value();
-    counts.departments = d->ui->departmentSpin->value();
-    counts.groups = d->ui->groupSpin->value();
-    counts.workers = d->ui->workersSpin->value();
-
-    d->deleteLater();
-
-    return ret;
-}
-
-void Dialog::on_buttonBox_accepted()
-{
-    setResult(QDialog::Accepted);
-    close();
-}
-
-void Dialog::on_buttonBox_rejected()
-{
-    setResult(QDialog::Rejected);
-    close();
+     return ui->workersSpin->value();
 }

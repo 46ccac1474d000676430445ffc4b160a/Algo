@@ -2,19 +2,13 @@
 #define DIALOG_HPP
 
 #include <QDialog>
+//#include "structures/structure.hpp"
+
+struct Counts;
 
 namespace Ui {
 class Dialog;
 }
-
-struct Counts
-{
-    int cities;
-    int branches;
-    int departments;
-    int groups;
-    int workers;
-};
 
 class Dialog : public QDialog
 {
@@ -22,20 +16,13 @@ class Dialog : public QDialog
 
 public:
     explicit Dialog(QWidget *parent = 0);
-    ~Dialog();
+    virtual ~Dialog();
 
     int citiesCount() const;
     int branchesCount() const;
     int departmentsCount() const;
     int groupsCount() const;
-
-    static int dialog(QWidget *parent, Counts &counts);
-
-private slots:
-
-    void on_buttonBox_accepted();
-
-    void on_buttonBox_rejected();
+    int workersCount() const;
 
 private:
     Ui::Dialog *ui;

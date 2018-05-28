@@ -3,7 +3,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Widget)
+    ui(new Ui::Widget),
+    workersData(2048)
 {
     ui->setupUi(this);
 
@@ -12,20 +13,31 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->listWidget_2, &QListWidget::itemDoubleClicked, this, &MainWindow::on_listWidget_itemDoubleClicked);
 
-    Counts c;
-    Dialog::dialog(this, c);
+    connect(this, &MainWindow::inited, [=]() -> void {
+        Dialog *d = new Dialog(this);
+        d->open();
 
-    //20 городов, 100 филиалов, 1_000 отделов, 10_000 групп и 1_000_000 сотрудников.
-    QPair<HashTable<City>, HashTable<WorkerData>> pair =
-            StructGenerator::generate(c.cities, c.branches, c.departments, c.groups, c.workers);
-    cities = pair.first;
-    workersData = pair.second;
+        connect(d, &Dialog::finished, [=](int val) -> void {
+            if (val == QDialog::Accepted)
+            {
+                Counts c;
+                c.cities = d->citiesCount();
+                c.branches = d->branchesCount();
+                c.departments = d->departmentsCount();
+                c.groups = d->groupsCount();
+                c.workers = d->workersCount();
 
-    QStringList s_list;
-    s_list << QString();
-    s_list << cities.keys();
+                on_countsEntered(c);
+            }
+            else
+            {
+                close();
+            }
 
-    ui->cityInput->addItems(s_list);
+            d->deleteLater();
+        });
+
+    });
 }
 
 MainWindow::~MainWindow()
@@ -246,4 +258,45 @@ void MainWindow::on_searchFormData_2_clicked()
     {
         QMessageBox::information(this, "Поиск сотрудника", QString("Сотрудник \"%1\" не найден").arg(ui->nameInput->currentText()));
     }
+}
+
+void MainWindow::on_countsEntered(const Counts &c)
+{
+    ui->tabWidget->setDisabled(true);
+
+    auto prog = new QProgressBar(this);
+    this->layout()->addWidget(prog);
+    prog->setRange(0, 100);
+    prog->setToolTip("Прогресс генерации структуры организации");
+    prog->show();
+
+    auto stGen = new StructGenerator(c);
+
+    auto t = new QThread(this);
+    stGen->moveToThread(t);
+
+    connect(stGen, &StructGenerator::finished, t, &QThread::quit, Qt::DirectConnection);
+    connect(t, &QThread::finished, t, &QThread::quit, Qt::DirectConnection);
+
+    connect(t, &QThread::started, stGen, &StructGenerator::run);
+
+    connect(stGen, &StructGenerator::progressUpdated, prog, &QProgressBar::setValue);
+
+    connect(stGen, &StructGenerator::structGenerated, [=](const QPair<HashTable<City>, HashTable<WorkerData>> &val) -> void {
+
+        prog->deleteLater();
+
+        cities = val.first;
+        workersData = val.second;
+
+        QStringList s_list;
+            s_list << QString();
+            s_list << cities.keys();
+
+        ui->cityInput->addItems(s_list);
+
+        ui->tabWidget->setEnabled(true);
+    });
+
+    t->start(QThread::TimeCriticalPriority);
 }

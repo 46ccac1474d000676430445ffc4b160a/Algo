@@ -44,7 +44,7 @@ public:
     {
         if (Dialog->objectName().isEmpty())
             Dialog->setObjectName(QStringLiteral("Dialog"));
-        Dialog->setWindowModality(Qt::WindowModal);
+        Dialog->setWindowModality(Qt::NonModal);
         Dialog->resize(540, 158);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);

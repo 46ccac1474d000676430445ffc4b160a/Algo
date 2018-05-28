@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <QString>
 #include <QStringList>
+#include <QObject>
 
 //#define local_struct_debug
 
@@ -56,11 +57,22 @@ struct WorkerData
     {}
 };
 
+struct Counts
+{
+    int cities;
+    int branches;
+    int departments;
+    int groups;
+    int workers;
+};
+
 typedef HashTable<Branch> City;
 
 
-class StructGenerator
+class StructGenerator : public QObject
 {
+    Q_OBJECT
+
     static QString rndstr()
     {
         QString str;
@@ -85,14 +97,19 @@ class StructGenerator
                 .arg(id++);
     }
 
-public:
-    static QPair<HashTable<City>, HashTable<WorkerData>> generate(
+    Counts m_counts;
+
+    QPair<HashTable<City>, HashTable<WorkerData>> generate(
                             int ci, // Cities
                             int br, // Branches
                             int de, // Departments
                             int gr, // Groups
                             int wo) // Workers
     {
+        int c_size = ci * br * de * gr * wo;
+        int percent = c_size / 100;
+        int counter = 0;
+
         HashTable<City> cities;
         HashTable<WorkerData> workersData;
 
@@ -150,6 +167,9 @@ public:
                                                                depName,
                                                                grName));
 
+                            counter++;
+                            if (counter % percent == 0) emit progressUpdated(counter / percent);
+
 #ifdef local_struct_debug
                             qDebug() << worker;
 #endif
@@ -196,6 +216,25 @@ public:
 
         return QPair<HashTable<City>, HashTable<WorkerData>>(cities, workersData);
     }
+
+public:
+    StructGenerator(const Counts &c) :
+        QObject(0),
+        m_counts(c)
+    {}
+
+public slots:
+    void run()
+    {
+        emit structGenerated(generate(m_counts.cities, m_counts.branches, m_counts.departments, m_counts.groups, m_counts.workers));
+        emit finished();
+        deleteLater();
+    }
+
+signals:
+    void progressUpdated(int);
+    void structGenerated(const QPair<HashTable<City>, HashTable<WorkerData>>&);
+    void finished();
 
 };
 

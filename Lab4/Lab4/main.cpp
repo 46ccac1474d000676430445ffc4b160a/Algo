@@ -6,11 +6,13 @@
 
 int main(int argc, char *argv[])
 {
-    qsrand(time(0));
     QApplication a(argc, argv);
+
+    qsrand(time(0));
 
     MainWindow w;
     w.show();
+    emit w.inited();
 
     return a.exec();
 }

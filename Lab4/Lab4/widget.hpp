@@ -7,6 +7,8 @@
 #include <QListWidgetItem>
 #include <QTimer>
 #include <QGraphicsOpacityEffect>
+#include <QThread>
+#include <QProgressBar>
 
 #include "structures/structure.hpp"
 #include "dialog.hpp"
@@ -27,7 +29,10 @@ class MainWindow : public QWidget
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    virtual ~MainWindow();
+
+signals:
+    void inited();
 
 private slots:
     void on_searchFormData_clicked();
@@ -41,6 +46,8 @@ private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
     void on_searchFormData_2_clicked();
+
+    void on_countsEntered(const Counts &c);
 };
 
 #endif // WIDGET_HPP

@@ -66,6 +66,7 @@ public:
     {
         if (Widget->objectName().isEmpty())
             Widget->setObjectName(QStringLiteral("Widget"));
+        Widget->setWindowModality(Qt::NonModal);
         Widget->resize(530, 469);
         Widget->setMinimumSize(QSize(530, 400));
         verticalLayout_3 = new QVBoxLayout(Widget);
@@ -271,6 +272,9 @@ public:
         requestform_2->setTitle(QApplication::translate("Widget", "\320\244\320\276\321\200\320\274\320\260 \320\267\320\260\320\277\321\200\320\276\321\201\320\260", nullptr));
         label_5->setText(QApplication::translate("Widget", "\320\230\320\274\321\217 \321\201\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272\320\260:", nullptr));
         searchFormData_2->setText(QApplication::translate("Widget", "\320\237\320\276\320\270\321\201\320\272", nullptr));
+#ifndef QT_NO_TOOLTIP
+        listWidget_2->setToolTip(QApplication::translate("Widget", "\320\224\320\273\321\217 \320\272\320\276\320\277\320\270\321\200\320\276\320\262\320\260\320\275\320\270\321\217 \321\202\320\265\320\272\321\201\321\202\320\260 \320\272\320\273\320\270\320\272\320\275\320\270\321\202\320\265 \320\277\320\276 \321\215\320\273\320\265\320\274\320\265\320\275\321\202\321\203 \320\264\320\262\320\260\320\266\320\264\321\213", nullptr));
+#endif // QT_NO_TOOLTIP
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Widget", "\320\227\320\260\320\277\321\200\320\276\321\201 \320\277\320\276 \320\270\320\274\320\265\320\275\320\270 \321\201\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272\320\260", nullptr));
     } // retranslateUi
 
