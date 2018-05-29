@@ -42,7 +42,7 @@ public:
     T get(const QString &key);
     bool remove(const QString &key);
     QVector<T> values();
-    QStringList keys();
+    QStringList keys(int n = 0);
 
 };
 
@@ -133,15 +133,29 @@ QVector<T> HashTable<T>::values()
 }
 
 template<class T>
-QStringList HashTable<T>::keys()
+QStringList HashTable<T>::keys(int n)
 {
     QStringList strlist;
 
-    foreach(auto &list, m_list)
+    if(n > 0)
     {
-        foreach(auto &val, list)
+        foreach(auto &list, m_list)
         {
-            strlist << val.first;
+            foreach(auto &val, list)
+            {
+                strlist << val.first;
+                if (--n == 0) return strlist;
+            }
+        }
+    }
+    else
+    {
+        foreach(auto &list, m_list)
+        {
+            foreach(auto &val, list)
+            {
+                strlist << val.first;
+            }
         }
     }
 

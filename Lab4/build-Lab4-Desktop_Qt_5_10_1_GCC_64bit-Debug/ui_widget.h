@@ -20,6 +20,7 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QListWidget>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolButton>
@@ -58,6 +59,8 @@ public:
     QLabel *label_5;
     QComboBox *nameInput;
     QHBoxLayout *horizontalLayout_2;
+    QPushButton *writeButton;
+    QPushButton *readButton;
     QSpacerItem *horizontalSpacer_2;
     QToolButton *searchFormData_2;
     QListWidget *listWidget_2;
@@ -207,6 +210,16 @@ public:
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        writeButton = new QPushButton(requestform_2);
+        writeButton->setObjectName(QStringLiteral("writeButton"));
+
+        horizontalLayout_2->addWidget(writeButton);
+
+        readButton = new QPushButton(requestform_2);
+        readButton->setObjectName(QStringLiteral("readButton"));
+
+        horizontalLayout_2->addWidget(readButton);
+
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_2->addItem(horizontalSpacer_2);
@@ -238,7 +251,7 @@ public:
 
         retranslateUi(Widget);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(Widget);
@@ -271,6 +284,14 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Widget", "\320\227\320\260\320\277\321\200\320\276\321\201 \320\277\320\276 \320\270\320\265\321\200\320\260\321\200\321\205\320\270\320\270 \320\276\321\200\320\263\320\260\320\275\320\270\320\267\320\260\321\206\320\270\320\270", nullptr));
         requestform_2->setTitle(QApplication::translate("Widget", "\320\244\320\276\321\200\320\274\320\260 \320\267\320\260\320\277\321\200\320\276\321\201\320\260", nullptr));
         label_5->setText(QApplication::translate("Widget", "\320\230\320\274\321\217 \321\201\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272\320\260:", nullptr));
+#ifndef QT_NO_TOOLTIP
+        writeButton->setToolTip(QApplication::translate("Widget", "<html><head/><body><p>\320\227\320\260\320\277\320\270\321\201\320\260\321\202\321\214 10,000 \320\270\320\274\321\221\320\275 \320\262 \321\204\320\260\320\271\320\273.</p></body></html>", nullptr));
+#endif // QT_NO_TOOLTIP
+        writeButton->setText(QApplication::translate("Widget", "\320\227\320\260\320\277\320\270\321\201\320\260\321\202\321\214 \320\262 \321\204\320\260\320\271\320\273", nullptr));
+#ifndef QT_NO_TOOLTIP
+        readButton->setToolTip(QApplication::translate("Widget", "<html><head/><body><p>\320\237\321\200\320\276\321\207\320\270\321\202\320\260\321\202\321\214 \320\270\320\274\320\265\320\275\320\260 \320\270\320\267 \321\204\320\260\320\271\320\273\320\260 \320\270 \320\262\321\213\320\277\320\276\320\273\320\275\320\270\321\202\321\214 \320\277\320\276\320\270\321\201\320\272 \321\215\321\202\320\270\321\205 \320\270\320\274\321\221\320\275 \320\262 \321\202\320\265\320\272\321\203\321\211\320\265\320\271 \320\261\320\260\320\267\320\265 \321\201\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272\320\276\320\262.</p></body></html>", nullptr));
+#endif // QT_NO_TOOLTIP
+        readButton->setText(QApplication::translate("Widget", "\320\237\321\200\320\276\321\207\320\270\321\202\320\260\321\202\321\214 \320\270\320\267 \321\204\320\260\320\271\320\273\320\260", nullptr));
         searchFormData_2->setText(QApplication::translate("Widget", "\320\237\320\276\320\270\321\201\320\272", nullptr));
 #ifndef QT_NO_TOOLTIP
         listWidget_2->setToolTip(QApplication::translate("Widget", "\320\224\320\273\321\217 \320\272\320\276\320\277\320\270\321\200\320\276\320\262\320\260\320\275\320\270\321\217 \321\202\320\265\320\272\321\201\321\202\320\260 \320\272\320\273\320\270\320\272\320\275\320\270\321\202\320\265 \320\277\320\276 \321\215\320\273\320\265\320\274\320\265\320\275\321\202\321\203 \320\264\320\262\320\260\320\266\320\264\321\213", nullptr));

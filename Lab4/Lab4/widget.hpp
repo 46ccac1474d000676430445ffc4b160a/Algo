@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QMessageBox>
+#include <QFileDialog>
 #include <QClipboard>
 #include <QListWidgetItem>
 #include <QTimer>
@@ -48,6 +49,10 @@ private slots:
     void on_searchFormData_2_clicked();
 
     void on_countsEntered(const Counts &c);
+
+    void on_readButton_clicked();
+
+    void on_writeButton_clicked();
 };
 
 #endif // WIDGET_HPP

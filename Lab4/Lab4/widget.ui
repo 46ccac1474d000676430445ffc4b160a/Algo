@@ -26,7 +26,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -235,6 +235,26 @@
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QPushButton" name="writeButton">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Записать 10,000 имён в файл.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Записать в файл</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="readButton">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Прочитать имена из файла и выполнить поиск этих имён в текущей базе сотрудников.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Прочитать из файла</string>
+              </property>
+             </widget>
+            </item>
             <item>
              <spacer name="horizontalSpacer_2">
               <property name="orientation">

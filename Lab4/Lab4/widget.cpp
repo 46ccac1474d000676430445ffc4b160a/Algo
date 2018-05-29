@@ -279,6 +279,7 @@ void MainWindow::on_countsEntered(const Counts &c)
 
     connect(stGen, &StructGenerator::finished, t, &QThread::quit, Qt::DirectConnection);
     connect(t, &QThread::finished, t, &QThread::quit, Qt::DirectConnection);
+    connect(this, &MainWindow::destroyed, t, &QThread::quit, Qt::DirectConnection);
 
     connect(t, &QThread::started, stGen, &StructGenerator::run);
 
@@ -301,4 +302,66 @@ void MainWindow::on_countsEntered(const Counts &c)
     });
 
     t->start(QThread::TimeCriticalPriority);
+}
+
+void MainWindow::on_writeButton_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Сохранить", QDir::homePath());
+
+    if (!fileName.isEmpty())
+    {
+        QFile f(fileName);
+        if (f.open(QIODevice::WriteOnly))
+        {
+
+            QTextStream s(&f);
+
+            QStringList s_list = workersData.keys(10000);
+
+            foreach (const QString &val, s_list)
+            {
+                s << val << "\n";
+            }
+
+            f.close();
+
+            QMessageBox::information(this, "Запись в файл", QString("Запись в файл \"%1\" прошла успешно!").arg(fileName));
+
+        }
+        else
+        {
+            QMessageBox::warning(this, "Сохранение файла", QString("Не удалось сохранить файл \"%1\"").arg(fileName));
+        }
+    }
+}
+
+void MainWindow::on_readButton_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Открыть файл", QDir::homePath());
+
+    if (!fileName.isEmpty())
+    {
+        QFile f(fileName);
+        if(f.open(QIODevice::ReadOnly))
+        {
+            QTextStream s(&f);
+
+            QString tmp;
+            s >> tmp;
+
+            f.close();
+
+            QStringList s_list = tmp.split("\n");
+
+            foreach (const QString &val, s_list)
+            {
+
+            }
+
+        }
+        else
+        {
+            QMessageBox::warning(this, "Чтение файла", QString("Невозможно открыть файл \"%1\"").arg(fileName));
+        }
+    }
 }

@@ -30,7 +30,7 @@ class Ui_Dialog
 public:
     QVBoxLayout *verticalLayout;
     QGroupBox *groupBox;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QGridLayout *gridLayout;
     QSpinBox *branchSpin;
     QLabel *label_2;
@@ -61,13 +61,13 @@ public:
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         groupBox = new QGroupBox(Dialog);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        widget = new QWidget(groupBox);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(10, 30, 522, 111));
-        gridLayout = new QGridLayout(widget);
+        layoutWidget = new QWidget(groupBox);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(10, 30, 522, 111));
+        gridLayout = new QGridLayout(layoutWidget);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        branchSpin = new QSpinBox(widget);
+        branchSpin = new QSpinBox(layoutWidget);
         branchSpin->setObjectName(QStringLiteral("branchSpin"));
         branchSpin->setMinimum(1);
         branchSpin->setMaximum(9);
@@ -75,22 +75,22 @@ public:
 
         gridLayout->addWidget(branchSpin, 2, 1, 1, 1);
 
-        label_2 = new QLabel(widget);
+        label_2 = new QLabel(layoutWidget);
         label_2->setObjectName(QStringLiteral("label_2"));
 
         gridLayout->addWidget(label_2, 1, 1, 1, 1);
 
-        label_4 = new QLabel(widget);
+        label_4 = new QLabel(layoutWidget);
         label_4->setObjectName(QStringLiteral("label_4"));
 
         gridLayout->addWidget(label_4, 1, 3, 1, 1);
 
-        label_3 = new QLabel(widget);
+        label_3 = new QLabel(layoutWidget);
         label_3->setObjectName(QStringLiteral("label_3"));
 
         gridLayout->addWidget(label_3, 1, 2, 1, 1);
 
-        citySpin = new QSpinBox(widget);
+        citySpin = new QSpinBox(layoutWidget);
         citySpin->setObjectName(QStringLiteral("citySpin"));
         citySpin->setMinimum(1);
         citySpin->setMaximum(30);
@@ -98,7 +98,7 @@ public:
 
         gridLayout->addWidget(citySpin, 2, 0, 1, 1);
 
-        departmentSpin = new QSpinBox(widget);
+        departmentSpin = new QSpinBox(layoutWidget);
         departmentSpin->setObjectName(QStringLiteral("departmentSpin"));
         departmentSpin->setMinimum(1);
         departmentSpin->setMaximum(20);
@@ -106,12 +106,12 @@ public:
 
         gridLayout->addWidget(departmentSpin, 2, 2, 1, 1);
 
-        label_5 = new QLabel(widget);
+        label_5 = new QLabel(layoutWidget);
         label_5->setObjectName(QStringLiteral("label_5"));
 
         gridLayout->addWidget(label_5, 1, 4, 1, 1);
 
-        groupSpin = new QSpinBox(widget);
+        groupSpin = new QSpinBox(layoutWidget);
         groupSpin->setObjectName(QStringLiteral("groupSpin"));
         groupSpin->setMinimum(1);
         groupSpin->setMaximum(100);
@@ -119,7 +119,7 @@ public:
 
         gridLayout->addWidget(groupSpin, 2, 3, 1, 1);
 
-        workersSpin = new QSpinBox(widget);
+        workersSpin = new QSpinBox(layoutWidget);
         workersSpin->setObjectName(QStringLiteral("workersSpin"));
         workersSpin->setMinimum(1);
         workersSpin->setMaximum(1000);
@@ -127,7 +127,7 @@ public:
 
         gridLayout->addWidget(workersSpin, 2, 4, 1, 1);
 
-        label = new QLabel(widget);
+        label = new QLabel(layoutWidget);
         label->setObjectName(QStringLiteral("label"));
 
         gridLayout->addWidget(label, 1, 0, 1, 1);
@@ -141,6 +141,10 @@ public:
 
         verticalLayout->addWidget(buttonBox);
 
+        QWidget::setTabOrder(citySpin, branchSpin);
+        QWidget::setTabOrder(branchSpin, departmentSpin);
+        QWidget::setTabOrder(departmentSpin, groupSpin);
+        QWidget::setTabOrder(groupSpin, workersSpin);
 
         retranslateUi(Dialog);
 

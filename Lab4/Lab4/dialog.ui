@@ -37,7 +37,7 @@
      <property name="title">
       <string>Параметры генерации</string>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -173,6 +173,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>citySpin</tabstop>
+  <tabstop>branchSpin</tabstop>
+  <tabstop>departmentSpin</tabstop>
+  <tabstop>groupSpin</tabstop>
+  <tabstop>workersSpin</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

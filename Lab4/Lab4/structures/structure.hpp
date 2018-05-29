@@ -103,11 +103,12 @@ class StructGenerator : public QObject
         HashTable<City> cities;
         HashTable<WorkerData> workersData;
 
+        int _ci = ci;
         while(ci--)
         {
             HashTable<Branch> branches;
 
-            QString cityName = g_cities[CITIES_C - ci - 1];
+            QString cityName = g_cities[_ci - ci - 1];
 
 #ifdef local_struct_debug
             qDebug() << "CITY * * *" << cityName << endl;
@@ -118,7 +119,7 @@ class StructGenerator : public QObject
             {
                 HashTable<Department> departments;
 
-                QString brName = QString("%1 филиал").arg(g_branches[BRANCHES_C - b - 1]);
+                QString brName = QString("%1 филиал").arg(g_branches[br - b - 1]);
 
 #ifdef local_struct_debug
                 qDebug() << "BRANCH * * *" << brName << endl;
@@ -129,7 +130,7 @@ class StructGenerator : public QObject
                 {
                     HashTable<Group> groups;
 
-                    QString depName = g_departments[DEPARTMENTS_C - d - 1];
+                    QString depName = g_departments[de - d - 1];
 
 #ifdef local_struct_debug
                     qDebug() << "DEPARTMENT * * *" << depName << endl;
