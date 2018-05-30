@@ -344,19 +344,43 @@ void MainWindow::on_readButton_clicked()
         QFile f(fileName);
         if(f.open(QIODevice::ReadOnly))
         {
-            QTextStream s(&f);
-
-            QString tmp;
-            s >> tmp;
+            QString tmp(f.readAll());
 
             f.close();
 
-            QStringList s_list = tmp.split("\n");
+            ui->listWidget_2->clear();
 
-            foreach (const QString &val, s_list)
+            QStringList s_list = tmp.split("\n", QString::SkipEmptyParts);
+
+            foreach (const QString &key, s_list)
             {
+                if (workersData.exists(key))
+                {
+                    auto name = new QListWidgetItem(QString("Сотрудник: %1").arg(key));
+                    name->setBackground(QBrush("#90ee90"));
 
+                    ui->listWidget_2->addItem(name);
+
+                    WorkerData data = workersData.get(key);
+
+                    QStringList s_list;
+                    if (!data.group.isEmpty()) s_list << QString("Группа: %1").arg(data.group);
+                    if (!data.department.isEmpty()) s_list << QString("Отдел: %1").arg(data.department);
+                    if (!data.branch.isEmpty()) s_list << QString("Филиал: %1").arg(data.branch);
+                    if (!data.city.isEmpty()) s_list << QString("Город: %1").arg(data.city);
+
+                    ui->listWidget_2->addItems(s_list);
+                }
+                else
+                {
+                    auto name = new QListWidgetItem(QString("Сотрудник \"%1\" не найден").arg(key));
+                    name->setBackground(QBrush("#ee9090"));
+
+                    ui->listWidget_2->addItem(name);
+                }
             }
+
+            QMessageBox::information(this, "Чтение файла", QString("Чтение из файла \"%1\" окончено").arg(fileName));
 
         }
         else

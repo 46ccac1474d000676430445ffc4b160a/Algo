@@ -8,6 +8,9 @@
 #include <QStringList>
 #include <QObject>
 
+#include <cstdlib>
+#include <ctime>
+
 //#define local_struct_debug
 
 /*
@@ -78,8 +81,8 @@ class StructGenerator : public QObject
         static int id = 1;
 
         return QString("%1 %2  id%3")
-                .arg(last_names[qrand()%LNAMES_C])
-                .arg(names[qrand()%NAMES_C])
+                .arg(last_names[rand()%LNAMES_C])
+                .arg(names[rand()%NAMES_C])
                 .arg(id++);
     }
 

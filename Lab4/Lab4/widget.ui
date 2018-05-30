@@ -26,7 +26,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -180,7 +180,7 @@
           <number>0</number>
          </property>
          <property name="sortingEnabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -238,7 +238,7 @@
             <item>
              <widget class="QPushButton" name="writeButton">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Записать 10,000 имён в файл.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Записать 10,000 имён сотрудников в файл.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
                <string>Записать в файл</string>
@@ -296,6 +296,9 @@
            <widget class="QListWidget" name="listWidget_2">
             <property name="toolTip">
              <string>Для копирования текста кликните по элементу дважды</string>
+            </property>
+            <property name="sortingEnabled">
+             <bool>false</bool>
             </property>
            </widget>
           </item>

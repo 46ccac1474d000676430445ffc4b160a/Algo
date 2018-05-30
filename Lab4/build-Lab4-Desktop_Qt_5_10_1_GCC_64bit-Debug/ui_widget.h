@@ -170,7 +170,7 @@ public:
         listWidget->setDefaultDropAction(Qt::CopyAction);
         listWidget->setMovement(QListView::Static);
         listWidget->setSpacing(0);
-        listWidget->setSortingEnabled(false);
+        listWidget->setSortingEnabled(true);
 
         verticalLayout_2->addWidget(listWidget);
 
@@ -238,6 +238,7 @@ public:
 
         listWidget_2 = new QListWidget(requestform_2);
         listWidget_2->setObjectName(QStringLiteral("listWidget_2"));
+        listWidget_2->setSortingEnabled(false);
 
         verticalLayout_4->addWidget(listWidget_2);
 
@@ -251,7 +252,7 @@ public:
 
         retranslateUi(Widget);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(Widget);
@@ -285,7 +286,7 @@ public:
         requestform_2->setTitle(QApplication::translate("Widget", "\320\244\320\276\321\200\320\274\320\260 \320\267\320\260\320\277\321\200\320\276\321\201\320\260", nullptr));
         label_5->setText(QApplication::translate("Widget", "\320\230\320\274\321\217 \321\201\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272\320\260:", nullptr));
 #ifndef QT_NO_TOOLTIP
-        writeButton->setToolTip(QApplication::translate("Widget", "<html><head/><body><p>\320\227\320\260\320\277\320\270\321\201\320\260\321\202\321\214 10,000 \320\270\320\274\321\221\320\275 \320\262 \321\204\320\260\320\271\320\273.</p></body></html>", nullptr));
+        writeButton->setToolTip(QApplication::translate("Widget", "<html><head/><body><p>\320\227\320\260\320\277\320\270\321\201\320\260\321\202\321\214 10,000 \320\270\320\274\321\221\320\275 \321\201\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272\320\276\320\262 \320\262 \321\204\320\260\320\271\320\273.</p></body></html>", nullptr));
 #endif // QT_NO_TOOLTIP
         writeButton->setText(QApplication::translate("Widget", "\320\227\320\260\320\277\320\270\321\201\320\260\321\202\321\214 \320\262 \321\204\320\260\320\271\320\273", nullptr));
 #ifndef QT_NO_TOOLTIP
