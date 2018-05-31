@@ -11,6 +11,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Lab4
 TEMPLATE = app
 
+Release:DESTDIR = ../Build
+win32:RC_ICONS = icon.ico
+
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -26,7 +29,8 @@ SOURCES += \
         main.cpp \
         widget.cpp \
     names.cpp \
-    dialog.cpp
+    dialog.cpp \
+    structures/structure.cpp
 
 HEADERS += \
         widget.hpp \

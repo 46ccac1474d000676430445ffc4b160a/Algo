@@ -15,30 +15,29 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->listWidget_2, &QListWidget::itemDoubleClicked, this, &MainWindow::on_listWidget_itemDoubleClicked);
 
-    connect(this, &MainWindow::inited, [=]() -> void {
-        Dialog *d = new Dialog(this);
-        d->open();
+    show();
 
-        connect(d, &Dialog::finished, [=](int val) -> void {
-            if (val == QDialog::Accepted)
-            {
-                Counts c;
-                c.cities = d->citiesCount();
-                c.branches = d->branchesCount();
-                c.departments = d->departmentsCount();
-                c.groups = d->groupsCount();
-                c.workers = d->workersCount();
+    Dialog *d = new Dialog(this);
+    d->open();
 
-                on_countsEntered(c);
-            }
-            else
-            {
-                close();
-            }
+    connect(d, &Dialog::finished, [=](int val) -> void {
+        if (val == QDialog::Accepted)
+        {
+            Counts c;
+            c.cities = d->citiesCount();
+            c.branches = d->branchesCount();
+            c.departments = d->departmentsCount();
+            c.groups = d->groupsCount();
+            c.workers = d->workersCount();
 
-            d->deleteLater();
-        });
+            on_countsEntered(c);
+        }
+        else
+        {
+            close();
+        }
 
+        d->deleteLater();
     });
 }
 
@@ -82,7 +81,7 @@ void MainWindow::on_searchFormData_clicked()
                                                                          .get(group)
                                                                          .headName));
 
-                                    item->setBackground(QBrush("lightgray"));
+                                    item->setBackground(QBrush("#ee9090"));
                                     ui->listWidget->addItem(item);
 
                                     ui->listWidget->addItems(cities
@@ -109,7 +108,7 @@ void MainWindow::on_searchFormData_clicked()
                                                                      .get(department)
                                                                      .headName));
 
-                                item->setBackground(QBrush("lightgray"));
+                                item->setBackground(QBrush("#ee9090"));
                                 ui->listWidget->addItem(item);
 
                                 ui->listWidget->addItems(cities
@@ -133,7 +132,7 @@ void MainWindow::on_searchFormData_clicked()
                                                         .get(city)
                                                         .get(branch)
                                                         .headName));
-                        item->setBackground(QBrush("lightgray"));
+                        item->setBackground(QBrush("#ee9090"));
                         ui->listWidget->addItem(item);
 
                         ui->listWidget->addItems(cities
@@ -274,7 +273,7 @@ void MainWindow::on_countsEntered(const Counts &c)
 
     auto stGen = new StructGenerator(c);
 
-    auto t = new QThread(this);
+    auto t = new QThread();
     stGen->moveToThread(t);
 
     connect(stGen, &StructGenerator::finished, t, &QThread::quit, Qt::DirectConnection);
@@ -313,8 +312,10 @@ void MainWindow::on_writeButton_clicked()
         QFile f(fileName);
         if (f.open(QIODevice::WriteOnly))
         {
+            qApp->setOverrideCursor(Qt::WaitCursor);
 
             QTextStream s(&f);
+            s.setCodec("UTF-8");
 
             QStringList s_list = workersData.keys(10000);
 
@@ -324,6 +325,8 @@ void MainWindow::on_writeButton_clicked()
             }
 
             f.close();
+
+            qApp->restoreOverrideCursor();
 
             QMessageBox::information(this, "Запись в файл", QString("Запись в файл \"%1\" прошла успешно!").arg(fileName));
 
@@ -344,6 +347,8 @@ void MainWindow::on_readButton_clicked()
         QFile f(fileName);
         if(f.open(QIODevice::ReadOnly))
         {
+            qApp->setOverrideCursor(Qt::WaitCursor);
+
             QString tmp(f.readAll());
 
             f.close();
@@ -356,7 +361,7 @@ void MainWindow::on_readButton_clicked()
             {
                 if (workersData.exists(key))
                 {
-                    auto name = new QListWidgetItem(QString("Сотрудник: %1").arg(key));
+                    auto name = new QListWidgetItem(key);
                     name->setBackground(QBrush("#90ee90"));
 
                     ui->listWidget_2->addItem(name);
@@ -379,6 +384,8 @@ void MainWindow::on_readButton_clicked()
                     ui->listWidget_2->addItem(name);
                 }
             }
+
+            qApp->restoreOverrideCursor();
 
             QMessageBox::information(this, "Чтение файла", QString("Чтение из файла \"%1\" окончено").arg(fileName));
 

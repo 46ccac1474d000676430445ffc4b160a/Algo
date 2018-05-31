@@ -27,13 +27,9 @@ class MainWindow : public QWidget
     HashTable<City> cities; // key is name of branch
     HashTable<WorkerData> workersData;
 
-
 public:
     explicit MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
-
-signals:
-    void inited();
 
 private slots:
     void on_searchFormData_clicked();
