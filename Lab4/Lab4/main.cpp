@@ -5,6 +5,8 @@
 
 int main(int argc, char *argv[])
 {
+    qRegisterMetaType<GeneratedStruct>("GeneratedStruct");
+
     QApplication a(argc, argv);
 
     MainWindow w;

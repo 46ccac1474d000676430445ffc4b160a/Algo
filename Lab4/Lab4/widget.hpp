@@ -49,6 +49,8 @@ private slots:
     void on_readButton_clicked();
 
     void on_writeButton_clicked();
+
+    void on_structGenerated(const GeneratedStruct &val);
 };
 
 #endif // WIDGET_HPP

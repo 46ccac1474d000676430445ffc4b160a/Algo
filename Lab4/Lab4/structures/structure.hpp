@@ -70,7 +70,7 @@ struct Counts
 };
 
 typedef HashTable<Branch> City;
-
+typedef QPair<HashTable<City>, HashTable<WorkerData>> GeneratedStruct;
 
 class StructGenerator : public QObject
 {
@@ -90,7 +90,7 @@ class StructGenerator : public QObject
 
     Counts m_counts;
 
-    QPair<HashTable<City>, HashTable<WorkerData>> generate(
+    GeneratedStruct generate(
                             int ci, // Cities
                             int br, // Branches
                             int de, // Departments
@@ -108,7 +108,7 @@ public slots:
 
 signals:
     void progressUpdated(int);
-    void structGenerated(const QPair<HashTable<City>, HashTable<WorkerData>>&);
+    void structGenerated(const GeneratedStruct&);
     void finished();
 
 };

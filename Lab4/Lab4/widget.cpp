@@ -284,23 +284,24 @@ void MainWindow::on_countsEntered(const Counts &c)
 
     connect(stGen, &StructGenerator::progressUpdated, prog, &QProgressBar::setValue);
 
-    connect(stGen, &StructGenerator::structGenerated, [=](const QPair<HashTable<City>, HashTable<WorkerData>> &val) -> void {
-
-        prog->deleteLater();
-
-        cities = val.first;
-        workersData = val.second;
-
-        QStringList s_list;
-            s_list << QString();
-            s_list << cities.keys();
-
-        ui->cityInput->addItems(s_list);
-
-        ui->tabWidget->setEnabled(true);
-    });
+    connect(stGen, &StructGenerator::structGenerated, this, &MainWindow::on_structGenerated);
+    connect(stGen, &StructGenerator::finished, prog, &QProgressBar::deleteLater);
 
     t->start(QThread::TimeCriticalPriority);
+}
+
+void MainWindow::on_structGenerated(const GeneratedStruct &val)
+{
+    cities = val.first;
+    workersData = val.second;
+
+    QStringList s_list;
+        s_list << QString();
+        s_list << cities.keys();
+
+    ui->cityInput->addItems(s_list);
+
+    ui->tabWidget->setEnabled(true);
 }
 
 void MainWindow::on_writeButton_clicked()

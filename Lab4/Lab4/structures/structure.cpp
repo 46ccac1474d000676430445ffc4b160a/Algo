@@ -2,7 +2,7 @@
 
 QRandomGenerator StructGenerator::rnd(QTime::currentTime().msecsSinceStartOfDay());
 
-QPair<HashTable<City>, HashTable<WorkerData> > StructGenerator::generate(int ci, int br, int de, int gr, int wo)
+GeneratedStruct StructGenerator::generate(int ci, int br, int de, int gr, int wo)
 {
     ci = ci > CITIES_C ? CITIES_C : ci;
     br = br > BRANCHES_C ? BRANCHES_C : br;
@@ -12,13 +12,13 @@ QPair<HashTable<City>, HashTable<WorkerData> > StructGenerator::generate(int ci,
     int percent = (c_size / 100) == 0 ? 1 : c_size / 100;
     int counter = 0;
 
-    HashTable<City> cities(ci/3);
-    HashTable<WorkerData> workersData(c_size/3);
+    HashTable<City> cities(ci/3 > 8 ? ci/3 : 8);
+    HashTable<WorkerData> workersData(c_size/3 > 8 ? c_size/3 : 8);
 
     int _ci = ci;
     while(ci--)
     {
-        HashTable<Branch> branches(br/3);
+        HashTable<Branch> branches(br/3 > 8 ? br/3 : 8);
 
         QString cityName = g_cities[_ci - ci - 1];
 
@@ -29,7 +29,7 @@ QPair<HashTable<City>, HashTable<WorkerData> > StructGenerator::generate(int ci,
         int b = br;
         while (b--)
         {
-            HashTable<Department> departments(de/3);
+            HashTable<Department> departments(de/3 > 8 ? de/3 : 8);
 
             QString brName = QString("%1 филиал").arg(g_branches[br - b - 1]);
 
@@ -40,7 +40,7 @@ QPair<HashTable<City>, HashTable<WorkerData> > StructGenerator::generate(int ci,
             int d = de;
             while (d--)
             {
-                HashTable<Group> groups(gr/3);
+                HashTable<Group> groups(gr/3 > 8 ? gr/3 : 8);
 
                 QString depName = g_departments[de - d - 1];
 
@@ -117,7 +117,7 @@ QPair<HashTable<City>, HashTable<WorkerData> > StructGenerator::generate(int ci,
 
     } // Cities
 
-    return QPair<HashTable<City>, HashTable<WorkerData>>(cities, workersData);
+    return GeneratedStruct(cities, workersData);
 }
 
 void StructGenerator::run()
