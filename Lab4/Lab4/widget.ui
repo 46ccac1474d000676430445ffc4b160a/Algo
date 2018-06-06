@@ -9,14 +9,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
-    <height>469</height>
+    <width>640</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>530</width>
-    <height>400</height>
+    <width>640</width>
+    <height>480</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -44,7 +44,7 @@
             <item row="1" column="1">
              <widget class="QComboBox" name="cityInput">
               <property name="toolTip">
-               <string>Город</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Введите название города или выберите его из списка.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="editable">
                <bool>true</bool>
@@ -60,7 +60,7 @@
             <item row="2" column="1">
              <widget class="QComboBox" name="branchInput">
               <property name="toolTip">
-               <string>Филиал</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Введите название филиала или выберите его из списка. Если поле пустое, то выведется список всех филиалов в городе, указаном выше. &lt;span style=&quot; color:#ff0000;&quot;&gt;Поле &amp;quot;Город&amp;quot; должно содержать текст.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="editable">
                <bool>true</bool>
@@ -70,7 +70,7 @@
             <item row="3" column="1">
              <widget class="QComboBox" name="departmentInput">
               <property name="toolTip">
-               <string>Отдел</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Введите название отдела или выберите его из списка. Если поле пустое, то выведется список всех отделов филиала, указаного выше и имя директора этого филиала. &lt;span style=&quot; color:#ff0000;&quot;&gt;Поля &amp;quot;Город&amp;quot; и &amp;quot;Филиал&amp;quot; должны содержать текст.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="editable">
                <bool>true</bool>
@@ -80,7 +80,7 @@
             <item row="4" column="1">
              <widget class="QComboBox" name="groupInput">
               <property name="toolTip">
-               <string>Группа</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Введите название группы или выберите его из списка. Если поле пустое, то выведется список всех групп отдела, указаного выше и имя начальника отдела. &lt;span style=&quot; color:#ff0000;&quot;&gt;Поля &amp;quot;Город&amp;quot;, &amp;quot;Филиал&amp;quot; и &amp;quot;Отдел&amp;quot; должны содержать текст.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="editable">
                <bool>true</bool>
@@ -168,7 +168,7 @@
        <item>
         <widget class="QListWidget" name="listWidget">
          <property name="toolTip">
-          <string>Для копирования текста кликните по элементу дважды</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Поле вывода. Для копирования текста кликните по элементу списка &lt;span style=&quot; color:#ff0000;&quot;&gt;дважды&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
@@ -229,6 +229,9 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Введите имя, фамилию и id сотрудника.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="editable">
                <bool>true</bool>
               </property>
@@ -241,7 +244,7 @@
             <item>
              <widget class="QPushButton" name="writeButton">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Записать 10,000 имён сотрудников в файл.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Записать первые 10,000 имён сотрудников, хранящихся в хэш-таблице с информацией о всех сотрудниках, в файл.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
                <string>Записать в файл</string>
@@ -251,7 +254,7 @@
             <item>
              <widget class="QPushButton" name="readButton">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Прочитать имена из файла и выполнить поиск этих имён в текущей базе сотрудников.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Прочитать все имена (за имя считатеся строка символов, заканчивающаяся символом переноса строки) из файла и выполнить поиск этих имён в текущей базе сотрудников.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
                <string>Прочитать из файла</string>
@@ -298,7 +301,7 @@
           <item>
            <widget class="QListWidget" name="listWidget_2">
             <property name="toolTip">
-             <string>Для копирования текста кликните по элементу дважды</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Поле вывода. Для копирования текста кликните по элементу списка &lt;span style=&quot; color:#ff0000;&quot;&gt;дважды&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="sortingEnabled">
              <bool>false</bool>

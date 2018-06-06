@@ -76,9 +76,11 @@ bool HashTable<T>::exists(const QString &key)
 template<class T>
 void HashTable<T>::add(const QString &key, const T &value)
 {
-    int index = hash(key.toUtf8());
-
-    m_list[index].append(QPair<QString, T>(key, value));
+	if(!exists(key))
+	{
+    	int index = hash(key.toUtf8());
+    	m_list[index].append(QPair<QString, T>(key, value));
+    }
 }
 
 template<class T>

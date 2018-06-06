@@ -208,9 +208,10 @@ void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     auto lbl = new QLabel("Текс скопирован", l_wgt);
     lbl->setGraphicsEffect(new QGraphicsOpacityEffect());
     lbl->setStyleSheet(
-                "background: #666e77;"
-                "border-radius: 10px;"
-                "padding: 10px;"
+                "background: #aaa;"
+                "border-radius: 15px;"
+                "font-size: 20px;"
+                "padding: 12px;"
                        );
 
     QRect r;
