@@ -32,9 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     g.addEdge("Вершина 3", "Вершина 4");
     g.addEdge("Вершина 4", "Вершина 5");
     g.addEdge("Вершина 5", "Вершина 6");
-    g.addEdge("Вершина 6", "Вершина 3");
-    g.addEdge("Вершина 5", "Вершина 1");
-    g.addEdge("Вершина 4", "Вершина 2");
+    g.addEdge("Вершина 6", "Вершина 1");
 
     QRectF rect(0., 0., 600., 600.);
 

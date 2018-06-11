@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2018-06-08T20:42:50
+# Project created by QtCreator 2018-05-31T23:11:47
 #
 #-------------------------------------------------
 
@@ -25,14 +25,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        widget.cpp \
-    graph.cpp \
-    graphtraversal.cpp
+        mainwindow.cpp \
+    Graph/graph.cpp \
+    Graph/graphpresentation.cpp
 
 HEADERS += \
-        widget.hpp \
-    graph.hpp \
-    graphtraversal.hpp
+        mainwindow.hpp \
+    Graph/graph.hpp \
+    Graph/graphpresentation.hpp
 
 FORMS += \
-        widget.ui
+        mainwindow.ui
