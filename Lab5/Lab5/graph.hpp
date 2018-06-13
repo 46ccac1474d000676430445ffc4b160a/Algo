@@ -16,7 +16,10 @@
 #include <qmath.h>
 
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneHoverEvent>
 #include <QCursor>
+#include <QPainter>
+#include <QFontMetrics>
 
 
 #include <QDebug>
@@ -56,10 +59,15 @@ protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *e);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
+    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *e);
+    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *e);
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *e);
 
 public:
     Vertex(const QString &name);
     virtual ~Vertex();
+
+    //virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     QString name() const;
 
@@ -73,7 +81,7 @@ public:
     QVector<Vertex *> adjacently() const;
     QStringList adjacentlyNames() const;
 
-    virtual void setPos(const QPointF &pos);
+    void setPosDepend(const QPointF &pos);
 };
 
 
@@ -82,9 +90,12 @@ public:
 
 class Graph : public QGraphicsScene
 {
+    Q_OBJECT
+
     QHash<QString, Vertex *> m_vertices;
 
 public:
+    Graph();
     virtual ~Graph();
 
     bool edgeExists(Vertex *v1, Vertex *v2) const;

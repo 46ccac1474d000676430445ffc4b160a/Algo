@@ -16,6 +16,9 @@ class GraphTraversal : public QObject
 
     QMutex setRoot_Mutex;
 
+    void p_deepthSearch(Vertex *root, QLinkedList<QString> &visited);
+    void p_widthSearch(Vertex *root, QLinkedList<QString> &visited);
+
     unsigned long m_msecsPause = 1500u;
 
 public:
@@ -33,8 +36,12 @@ public slots:
     void widthSearch();
 
 signals:
+    void repaintVertex(Vertex *);
+    void repaintEdge(Edge *);
+
     void curentVertex(Vertex *);
     void curentEdge(Edge *);
+
     void finished();
 };
 

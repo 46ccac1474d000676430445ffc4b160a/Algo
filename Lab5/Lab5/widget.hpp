@@ -43,6 +43,9 @@ private slots:
     void on_curentVertex(Vertex *v);
     void on_curentEdge(Edge *e);
 
+    void on_repaintVertex(Vertex *v);
+    void on_repaintEdge(Edge *e);
+
     void on_restoreColorsButton_clicked();
 
     void on_traversalStarted();

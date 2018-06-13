@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGraphicsView>
@@ -22,8 +23,10 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -42,6 +45,7 @@ public:
     QPushButton *restoreColorsButton;
     QGroupBox *groupBox;
     QVBoxLayout *verticalLayout;
+    QComboBox *rootVertexName;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label;
     QDoubleSpinBox *delaySpinBox;
@@ -49,6 +53,9 @@ public:
     QRadioButton *widthTrRadio;
     QPushButton *startTraversalButton;
     QTextBrowser *outputField;
+    QHBoxLayout *horizontalLayout;
+    QSpacerItem *horizontalSpacer;
+    QToolButton *clearButton;
 
     void setupUi(QWidget *Widget)
     {
@@ -70,6 +77,7 @@ public:
         sizePolicy.setHeightForWidth(graphicsView->sizePolicy().hasHeightForWidth());
         graphicsView->setSizePolicy(sizePolicy);
         graphicsView->setRenderHints(QPainter::Antialiasing|QPainter::TextAntialiasing);
+        graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
         splitter->addWidget(graphicsView);
         frame = new QFrame(splitter);
         frame->setObjectName(QStringLiteral("frame"));
@@ -101,6 +109,11 @@ public:
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        rootVertexName = new QComboBox(groupBox);
+        rootVertexName->setObjectName(QStringLiteral("rootVertexName"));
+
+        verticalLayout->addWidget(rootVertexName);
+
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
@@ -150,6 +163,21 @@ public:
 
         verticalLayout_2->addWidget(outputField);
 
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
+        clearButton = new QToolButton(frame);
+        clearButton->setObjectName(QStringLiteral("clearButton"));
+
+        horizontalLayout->addWidget(clearButton);
+
+
+        verticalLayout_2->addLayout(horizontalLayout);
+
         splitter->addWidget(frame);
 
         verticalLayout_3->addWidget(splitter);
@@ -167,10 +195,17 @@ public:
         placeRoundedButton->setText(QApplication::translate("Widget", "\320\222\321\213\321\201\321\202\321\200\320\276\320\270\321\202\321\214 \320\277\320\276 \320\272\321\200\321\203\320\263\321\203", nullptr));
         restoreColorsButton->setText(QApplication::translate("Widget", "\320\222\320\276\321\201\321\202\320\260\320\275\320\276\320\262\320\270\321\202\321\214 \321\206\320\262\320\265\321\202\320\260", nullptr));
         groupBox->setTitle(QApplication::translate("Widget", "\320\236\320\261\321\205\320\276\320\264 \320\263\321\200\320\260\321\204\320\260", nullptr));
+#ifndef QT_NO_TOOLTIP
+        rootVertexName->setToolTip(QApplication::translate("Widget", "\320\222\321\213\320\261\320\276\321\200 \320\272\320\276\321\200\320\275\320\265\320\262\320\276\320\271 \320\262\320\265\321\200\321\210\320\270\320\275\321\213 \320\264\320\273\321\217 \320\277\320\276\320\270\321\201\320\272\320\260", nullptr));
+#endif // QT_NO_TOOLTIP
         label->setText(QApplication::translate("Widget", "\320\227\320\260\320\264\320\265\321\200\320\266\320\272\320\260:", nullptr));
         deepthTrRadio->setText(QApplication::translate("Widget", "\320\236\320\261\321\205\320\276\320\264 \320\262 \320\263\320\273\321\203\320\261\320\270\320\275\321\203", nullptr));
         widthTrRadio->setText(QApplication::translate("Widget", "\320\236\320\261\321\205\320\276\320\264 \320\262 \321\210\320\270\321\200\320\270\320\275\321\203", nullptr));
         startTraversalButton->setText(QApplication::translate("Widget", "\320\235\320\260\321\207\320\260\321\202\321\214 \320\276\320\261\321\205\320\276\320\264", nullptr));
+#ifndef QT_NO_TOOLTIP
+        clearButton->setToolTip(QApplication::translate("Widget", "<html><head/><body><p>\320\236\321\207\320\270\321\201\321\202\320\270\321\202\321\214 \320\277\320\260\320\275\320\265\320\273\321\214 \320\262\321\213\320\262\320\276\320\264\320\260</p></body></html>", nullptr));
+#endif // QT_NO_TOOLTIP
+        clearButton->setText(QApplication::translate("Widget", "...", nullptr));
     } // retranslateUi
 
 };

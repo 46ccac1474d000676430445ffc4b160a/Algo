@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Widget_t {
-    QByteArrayData data[16];
-    char stringdata0[234];
+    QByteArrayData data[18];
+    char stringdata0[266];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -44,9 +44,11 @@ QT_MOC_LITERAL(9, 138, 1), // "v"
 QT_MOC_LITERAL(10, 140, 13), // "on_curentEdge"
 QT_MOC_LITERAL(11, 154, 5), // "Edge*"
 QT_MOC_LITERAL(12, 160, 1), // "e"
-QT_MOC_LITERAL(13, 162, 30), // "on_restoreColorsButton_clicked"
-QT_MOC_LITERAL(14, 193, 19), // "on_traversalStarted"
-QT_MOC_LITERAL(15, 213, 20) // "on_traversalFinished"
+QT_MOC_LITERAL(13, 162, 16), // "on_repaintVertex"
+QT_MOC_LITERAL(14, 179, 14), // "on_repaintEdge"
+QT_MOC_LITERAL(15, 194, 30), // "on_restoreColorsButton_clicked"
+QT_MOC_LITERAL(16, 225, 19), // "on_traversalStarted"
+QT_MOC_LITERAL(17, 245, 20) // "on_traversalFinished"
 
     },
     "Widget\0loadFile\0\0filename\0"
@@ -54,7 +56,8 @@ QT_MOC_LITERAL(15, 213, 20) // "on_traversalFinished"
     "on_openFileButton_clicked\0"
     "on_startTraversalButton_clicked\0"
     "on_curentVertex\0Vertex*\0v\0on_curentEdge\0"
-    "Edge*\0e\0on_restoreColorsButton_clicked\0"
+    "Edge*\0e\0on_repaintVertex\0on_repaintEdge\0"
+    "on_restoreColorsButton_clicked\0"
     "on_traversalStarted\0on_traversalFinished"
 };
 #undef QT_MOC_LITERAL
@@ -65,7 +68,7 @@ static const uint qt_meta_data_Widget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+      11,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -73,21 +76,25 @@ static const uint qt_meta_data_Widget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   59,    2, 0x08 /* Private */,
-       4,    0,   62,    2, 0x08 /* Private */,
-       5,    0,   63,    2, 0x08 /* Private */,
-       6,    0,   64,    2, 0x08 /* Private */,
-       7,    1,   65,    2, 0x08 /* Private */,
-      10,    1,   68,    2, 0x08 /* Private */,
-      13,    0,   71,    2, 0x08 /* Private */,
-      14,    0,   72,    2, 0x08 /* Private */,
-      15,    0,   73,    2, 0x08 /* Private */,
+       1,    1,   69,    2, 0x08 /* Private */,
+       4,    0,   72,    2, 0x08 /* Private */,
+       5,    0,   73,    2, 0x08 /* Private */,
+       6,    0,   74,    2, 0x08 /* Private */,
+       7,    1,   75,    2, 0x08 /* Private */,
+      10,    1,   78,    2, 0x08 /* Private */,
+      13,    1,   81,    2, 0x08 /* Private */,
+      14,    1,   84,    2, 0x08 /* Private */,
+      15,    0,   87,    2, 0x08 /* Private */,
+      16,    0,   88,    2, 0x08 /* Private */,
+      17,    0,   89,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    3,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 8,    9,
+    QMetaType::Void, 0x80000000 | 11,   12,
     QMetaType::Void, 0x80000000 | 8,    9,
     QMetaType::Void, 0x80000000 | 11,   12,
     QMetaType::Void,
@@ -109,9 +116,11 @@ void Widget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 3: _t->on_startTraversalButton_clicked(); break;
         case 4: _t->on_curentVertex((*reinterpret_cast< Vertex*(*)>(_a[1]))); break;
         case 5: _t->on_curentEdge((*reinterpret_cast< Edge*(*)>(_a[1]))); break;
-        case 6: _t->on_restoreColorsButton_clicked(); break;
-        case 7: _t->on_traversalStarted(); break;
-        case 8: _t->on_traversalFinished(); break;
+        case 6: _t->on_repaintVertex((*reinterpret_cast< Vertex*(*)>(_a[1]))); break;
+        case 7: _t->on_repaintEdge((*reinterpret_cast< Edge*(*)>(_a[1]))); break;
+        case 8: _t->on_restoreColorsButton_clicked(); break;
+        case 9: _t->on_traversalStarted(); break;
+        case 10: _t->on_traversalFinished(); break;
         default: ;
         }
     }
@@ -142,13 +151,13 @@ int Widget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 11)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 11;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 9)
+        if (_id < 11)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 9;
+        _id -= 11;
     }
     return _id;
 }

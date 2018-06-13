@@ -71,6 +71,7 @@ Edge *Vertex::edgeTo(const QString &v) const
 Vertex::Vertex(const QString &name) :
     m_name(name)
 {
+    setAcceptHoverEvents(true);
     setBrush(QBrush("lightgreen"));
     setToolTip(name);
 }
@@ -84,6 +85,11 @@ Vertex::~Vertex()
         delete edge;
     }
 }
+
+//void Vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+//{
+//    QGraphicsEllipseItem::paint(painter, option, widget);
+//}
 
 QLinkedList<Edge *> Vertex::edges() const
 { return m_edges; }
@@ -110,9 +116,9 @@ QStringList Vertex::adjacentlyNames() const
     return names;
 }
 
-void Vertex::setPos(const QPointF &pos)
+void Vertex::setPosDepend(const QPointF &pos)
 {
-    QGraphicsEllipseItem::setPos(pos);
+    setPos(pos);
     foreach (auto edge, m_edges)
     {
         if (edge->v1()->name() == name()) edge->setP1(pos);
@@ -124,7 +130,7 @@ void Vertex::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 {
     if (e->buttons() & Qt::LeftButton)
     {
-        setPos(mapToScene(e->pos()));
+        setPosDepend(mapToScene(e->pos()));
     }
 }
 
@@ -139,10 +145,31 @@ void Vertex::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
     e->ignore();
 }
 
+void Vertex::hoverEnterEvent(QGraphicsSceneHoverEvent *e)
+{
+    setCursor(QCursor(Qt::OpenHandCursor));
+    e->ignore();
+}
+
+void Vertex::hoverLeaveEvent(QGraphicsSceneHoverEvent *e)
+{
+    setCursor(QCursor(Qt::ArrowCursor));
+    e->ignore();
+}
+
+void Vertex::hoverMoveEvent(QGraphicsSceneHoverEvent *e)
+{
+    setCursor(QCursor(Qt::OpenHandCursor));
+    e->ignore();
+}
 
 
 
 
+
+Graph::Graph()
+{
+}
 
 Graph::~Graph()
 { clearVertices(); }
@@ -275,7 +302,7 @@ void Graph::placeRounded()
         QRectF rect(-(vr/2.), -(vr/2.), vr, vr);
 
         vertex->setRect(rect);
-        vertex->setPos(QPointF(x, y));
+        vertex->setPosDepend(QPointF(x, y));
 
         vertex->setZValue(1.);
     }

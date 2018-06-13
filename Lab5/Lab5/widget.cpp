@@ -10,9 +10,13 @@ Widget::Widget(QWidget *parent) :
 
     ui->setupUi(this);
 
+    ui->clearButton->setIcon(style()->standardIcon(QStyle::SP_TrashIcon));
+    connect(ui->clearButton, &QToolButton::clicked, ui->outputField, &QTextBrowser::clear);
+
     g->setSceneRect(QRectF(0., 0., 600, 600));
 
     ui->graphicsView->setScene(g);
+    ui->graphicsView->thread()->setPriority(QThread::TimeCriticalPriority);
 }
 
 Widget::~Widget()
@@ -56,6 +60,9 @@ void Widget::loadFile(const QString &filename)
                 g->addEdge(val.toArray()[0].toString(), val.toArray()[1].toString());
         }
 
+        ui->rootVertexName->clear();
+        ui->rootVertexName->addItems(g->vertexNames());
+
         g->placeRounded();
 
         ui->placeRoundedButton->setEnabled(true);
@@ -83,7 +90,7 @@ void Widget::on_startTraversalButton_clicked()
     {
         auto t = new QThread();
 
-        auto df = new GraphTraversal(g->vertex(g->vertexNames().first()));
+        auto df = new GraphTraversal(g->vertex(ui->rootVertexName->currentText()));
         df->setMsecsPause(ui->delaySpinBox->value() * 1000.0);
         df->moveToThread(t);
 
@@ -95,6 +102,10 @@ void Widget::on_startTraversalButton_clicked()
 
         connect(df, &GraphTraversal::curentVertex, this, &Widget::on_curentVertex);
         connect(df, &GraphTraversal::curentEdge, this, &Widget::on_curentEdge);
+
+        connect(df, &GraphTraversal::repaintVertex, this, &Widget::on_repaintVertex);
+        connect(df, &GraphTraversal::repaintEdge, this, &Widget::on_repaintEdge);
+
 
         connect(t, &QThread::started, this, &Widget::on_traversalStarted);
 
@@ -109,14 +120,31 @@ void Widget::on_startTraversalButton_clicked()
     }
 }
 
+void Widget::on_curentVertex(Vertex *v)
+{
+    v->setBrush(QBrush(QColor("#0f0")));
+    v->setPen(QPen(QBrush("black"), 2.));
+
+    ui->outputField->append(QString("<span style='color: %1'>%2</span>")
+                            .arg(ui->deepthTrRadio->isChecked() ? "red" : "blue")
+                            .arg(v->name()));
+}
+
+void Widget::on_curentEdge(Edge *e)
+{
+    e->setPen(QPen(QBrush("#0f0"), 3.5));
+}
+
 void Widget::on_traversalStarted()
 {
+    ui->rootVertexName->setDisabled(true);
     ui->delaySpinBox->setDisabled(true);
     ui->deepthTrRadio->setDisabled(true);
     ui->widthTrRadio->setDisabled(true);
     ui->startTraversalButton->setDisabled(true);
     ui->openFileButton->setDisabled(true);
     ui->restoreColorsButton->setDisabled(true);
+    ui->clearButton->setDisabled(true);
 
     ui->outputField->append(QString("Начало обхода в %1:")
                             .arg(ui->deepthTrRadio->isChecked() ? "глубину" : "ширину"));
@@ -128,34 +156,30 @@ void Widget::on_traversalFinished()
     ui->outputField->append("<br>");
     QMessageBox::information(this, "Обход графа", "Обход графа завершен!");
 
+    ui->rootVertexName->setEnabled(true);
     ui->delaySpinBox->setEnabled(true);
     ui->deepthTrRadio->setEnabled(true);
     ui->widthTrRadio->setEnabled(true);
     ui->startTraversalButton->setEnabled(true);
     ui->openFileButton->setEnabled(true);
     ui->restoreColorsButton->setEnabled(true);
+    ui->clearButton->setEnabled(true);
 }
 
-void Widget::on_curentVertex(Vertex *v)
+void Widget::on_repaintVertex(Vertex *v)
 {
-    QString color;
-
     if (ui->deepthTrRadio->isChecked())
     {
-        color = "red";
+        v->setBrush(QBrush(QColor("red")));
     }
     else if (ui->widthTrRadio->isChecked())
     {
-        color = "blue";
+        v->setBrush(QBrush(QColor("blue")));
     }
-
-    v->setBrush(QBrush(QColor(color)));
-    ui->outputField->append(QString("<span style='color: %1'>%2</span>")
-                            .arg(color)
-                            .arg(v->name()));
+    v->setPen(QPen(QBrush("black"), 1.));
 }
 
-void Widget::on_curentEdge(Edge *e)
+void Widget::on_repaintEdge(Edge *e)
 {
     if (ui->deepthTrRadio->isChecked()) e->setPen(QPen(QBrush("red"), 2.));
     else if (ui->widthTrRadio->isChecked()) e->setPen(QPen(QBrush("blue"), 2.));

@@ -28,66 +28,64 @@ GraphTraversal::GraphTraversal(Vertex *root, QObject *parent) :
     connect(this, &GraphTraversal::finished, this, &GraphTraversal::deleteLater, Qt::DirectConnection);
 }
 
-void GraphTraversal::deepthSearch()
+void GraphTraversal::p_deepthSearch(Vertex *root, QLinkedList<QString> &visited)
 {
-    QMutexLocker l(&setRoot_Mutex);
-
-    QLinkedList<Vertex *> stack;
-    QLinkedList<QString> visited;
-
-    stack.append(m_root);
-    visited.append(m_root->name());
-
-    emit curentVertex(m_root);
-    QThread::msleep(m_msecsPause);
-
-    while (!stack.isEmpty())
+    QLinkedList<Edge *> edges = root->edges();
+    foreach (auto edge, edges)
     {
-        Vertex *vertex = stack.last();
-        stack.removeLast();
-
-
-        QLinkedList<Edge *> edges = vertex->edges();
-        foreach (Edge *edge, edges)
+        if (!visited.contains(edge->v1()->name()))
         {
-            if (!visited.contains(edge->v1()->name()))
-            {
-                stack.append(edge->v1());
-                visited.append(edge->v1()->name());
+            visited.append(edge->v1()->name());
 
-                emit curentEdge(edge);
-                QThread::msleep(m_msecsPause);
-                emit curentVertex(edge->v1());
-                QThread::msleep(m_msecsPause);
-            }
-            if (!visited.contains(edge->v2()->name()))
-            {
-                stack.append(edge->v2());
-                visited.append(edge->v2()->name());
+            emit curentEdge(edge);
+            QThread::msleep(m_msecsPause);
+            emit repaintEdge(edge);
 
-                emit curentEdge(edge);
-                QThread::msleep(m_msecsPause);
-                emit curentVertex(edge->v2());
-                QThread::msleep(m_msecsPause);
-            }
+            emit curentVertex(edge->v1());
+            QThread::msleep(m_msecsPause);
+            emit repaintVertex(edge->v1());
+
+            p_deepthSearch(edge->v1(), visited);
+
+            emit curentEdge(edge);
+            QThread::msleep(m_msecsPause);
+            emit repaintEdge(edge);
+
+            emit curentVertex(root);
+            QThread::msleep(m_msecsPause);
+            emit repaintVertex(root);
+        }
+        if (!visited.contains(edge->v2()->name()))
+        {
+            visited.append(edge->v2()->name());
+
+            emit curentEdge(edge);
+            QThread::msleep(m_msecsPause);
+            emit repaintEdge(edge);
+
+            emit curentVertex(edge->v2());
+            QThread::msleep(m_msecsPause);
+            emit repaintVertex(edge->v2());
+
+            p_deepthSearch(edge->v2(), visited);
+
+            emit curentEdge(edge);
+            QThread::msleep(m_msecsPause);
+            emit repaintEdge(edge);
+
+            emit curentVertex(root);
+            QThread::msleep(m_msecsPause);
+            emit repaintVertex(root);
         }
     }
-
-    emit finished();
 }
 
-void GraphTraversal::widthSearch()
+void GraphTraversal::p_widthSearch(Vertex *root, QLinkedList<QString> &visited)
 {
-    QMutexLocker l(&setRoot_Mutex);
-
     QLinkedList<Vertex *> queue;
-    QLinkedList<QString> visited;
 
-    queue.append(m_root);
-    visited.append(m_root->name());
-
-    emit curentVertex(m_root);
-    QThread::msleep(m_msecsPause);
+    queue.append(root);
+    visited.append(root->name());
 
     while (!queue.isEmpty())
     {
@@ -104,8 +102,11 @@ void GraphTraversal::widthSearch()
 
                 emit curentEdge(edge);
                 QThread::msleep(m_msecsPause);
+                emit repaintEdge(edge);
+
                 emit curentVertex(edge->v1());
                 QThread::msleep(m_msecsPause);
+                emit repaintVertex(edge->v1());
             }
             if (!visited.contains(edge->v2()->name()))
             {
@@ -114,11 +115,44 @@ void GraphTraversal::widthSearch()
 
                 emit curentEdge(edge);
                 QThread::msleep(m_msecsPause);
+                emit repaintEdge(edge);
+
                 emit curentVertex(edge->v2());
                 QThread::msleep(m_msecsPause);
+                emit repaintVertex(edge->v2());
             }
         }
     }
+}
+
+void GraphTraversal::deepthSearch()
+{
+    QMutexLocker l(&setRoot_Mutex);
+
+    QLinkedList<QString> visited;
+    visited.append(root()->name());
+
+    emit curentVertex(root());
+    QThread::msleep(m_msecsPause);
+    emit repaintVertex(root());
+
+    p_deepthSearch(root(), visited);
+
+    emit finished();
+}
+
+void GraphTraversal::widthSearch()
+{
+    QMutexLocker l(&setRoot_Mutex);
+
+    QLinkedList<QString> visited;
+    visited.append(root()->name());
+
+    emit curentVertex(root());
+    QThread::msleep(m_msecsPause);
+    emit repaintVertex(root());
+
+    p_widthSearch(root(), visited);
 
     emit finished();
 }
