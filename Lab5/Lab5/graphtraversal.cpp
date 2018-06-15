@@ -89,8 +89,15 @@ void GraphTraversal::p_widthSearch(Vertex *root, QLinkedList<QString> &visited)
 
     while (!queue.isEmpty())
     {
-        Vertex *vertex = queue.first();
-        queue.removeFirst();
+        Vertex *vertex = queue.takeFirst();
+
+
+        emit curentVertex(vertex);
+        QThread::msleep(m_msecsPause);
+
+        QLinkedList<Edge *> v_edges;
+        QLinkedList<Vertex *> v_vertices;
+
 
         QLinkedList<Edge *> edges = vertex->edges();
         foreach (Edge *edge, edges)
@@ -102,11 +109,12 @@ void GraphTraversal::p_widthSearch(Vertex *root, QLinkedList<QString> &visited)
 
                 emit curentEdge(edge);
                 QThread::msleep(m_msecsPause);
-                emit repaintEdge(edge);
 
                 emit curentVertex(edge->v1());
                 QThread::msleep(m_msecsPause);
-                emit repaintVertex(edge->v1());
+
+                v_edges.prepend(edge);
+                v_vertices.prepend(edge->v1());
             }
             if (!visited.contains(edge->v2()->name()))
             {
@@ -115,13 +123,26 @@ void GraphTraversal::p_widthSearch(Vertex *root, QLinkedList<QString> &visited)
 
                 emit curentEdge(edge);
                 QThread::msleep(m_msecsPause);
-                emit repaintEdge(edge);
 
                 emit curentVertex(edge->v2());
                 QThread::msleep(m_msecsPause);
-                emit repaintVertex(edge->v2());
+
+                v_edges.prepend(edge);
+                v_vertices.prepend(edge->v2());
             }
         }
+
+        int n = v_vertices.size();
+        while(n--)
+        {
+            emit repaintVertex(v_vertices.takeFirst());
+            QThread::msleep(m_msecsPause);
+
+            emit repaintEdge(v_edges.takeFirst());
+            QThread::msleep(m_msecsPause);
+        }
+        emit repaintVertex(vertex);
+        QThread::msleep(m_msecsPause);
     }
 }
 
@@ -147,10 +168,6 @@ void GraphTraversal::widthSearch()
 
     QLinkedList<QString> visited;
     visited.append(root()->name());
-
-    emit curentVertex(root());
-    QThread::msleep(m_msecsPause);
-    emit repaintVertex(root());
 
     p_widthSearch(root(), visited);
 

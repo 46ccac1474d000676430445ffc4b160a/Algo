@@ -72,6 +72,13 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Вершина:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QComboBox" name="rootVertexName">
             <property name="toolTip">
              <string>Выбор корневой вершины для поиска</string>
