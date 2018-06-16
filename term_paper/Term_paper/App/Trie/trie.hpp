@@ -44,17 +44,24 @@ class Trie
 
     static void p_words(Node_p *node, QString word, QStringList &list, int n);
 
+    Trie() : root(new Node_p()) {}
+    Trie(const Trie &){}
+    Trie(Trie &){}
+
+    static Trie p_trie;
+
 public:
-    Trie();
+    static Trie &trie();
     virtual ~Trie();
 
-    bool isEmpty();
+    bool isEmpty() const;
 
     QStringList words(const QString &preffix, int n = 5) const;
-    bool contains(const QString &word);
+    bool contains(const QString &word) const;
 
     void addWord(const QString &word);
     void remove(const QString &word);
+    void clear();
 
 };
 

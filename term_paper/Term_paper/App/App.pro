@@ -12,12 +12,14 @@ DESTDIR = ../../Build
 
 HEADERS = \
    $$PWD/Trie/trie.hpp \
-   $$PWD/mainwindow.hpp
+   $$PWD/mainwindow.hpp \
+    TextEdit/textedit.hpp
 
 SOURCES = \
    $$PWD/Trie/trie.cpp \
    $$PWD/main.cpp \
-   $$PWD/mainwindow.cpp
+   $$PWD/mainwindow.cpp \
+    TextEdit/textedit.cpp
 
 FORMS = \
     $$PWD/mainwindow.ui

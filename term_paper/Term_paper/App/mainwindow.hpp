@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+#include <TextEdit/textedit.hpp>
+#include "Trie/trie.hpp"
+
 #include <QDebug>
 
 namespace Ui {

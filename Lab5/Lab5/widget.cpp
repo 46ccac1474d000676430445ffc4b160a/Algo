@@ -106,6 +106,7 @@ void Widget::on_startTraversalButton_clicked()
         connect(df, &GraphTraversal::repaintVertex, this, &Widget::on_repaintVertex);
         connect(df, &GraphTraversal::repaintEdge, this, &Widget::on_repaintEdge);
 
+        connect(df, &GraphTraversal::log, this, &Widget::getLog);
 
         connect(t, &QThread::started, this, &Widget::on_traversalStarted);
 
@@ -124,10 +125,6 @@ void Widget::on_curentVertex(Vertex *v)
 {
     v->setBrush(QBrush(QColor("#0f0")));
     v->setPen(QPen(QBrush("black"), 2.));
-
-    ui->outputField->append(QString("<span style='color: %1'>%2</span>")
-                            .arg(ui->deepthTrRadio->isChecked() ? "red" : "blue")
-                            .arg(v->name()));
 }
 
 void Widget::on_curentEdge(Edge *e)
@@ -183,6 +180,13 @@ void Widget::on_repaintEdge(Edge *e)
 {
     if (ui->deepthTrRadio->isChecked()) e->setPen(QPen(QBrush("red"), 2.));
     else if (ui->widthTrRadio->isChecked()) e->setPen(QPen(QBrush("blue"), 2.));
+}
+
+void Widget::getLog(const QString &log)
+{
+    ui->outputField->append(QString("<span style='color: %1'>%2</span>")
+                                .arg(ui->deepthTrRadio->isChecked() ? "red" : "blue")
+                                .arg(log));
 }
 
 void Widget::on_restoreColorsButton_clicked()

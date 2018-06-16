@@ -13,9 +13,9 @@ public:
 private Q_SLOTS:
     void test_index();
     void test_letter();
-    void test_words();
-    void test_contains();
+    void test_contains_addWord();
     void test_remove();
+    void test_words();
 };
 
 TrieTest::TrieTest()
@@ -24,93 +24,79 @@ TrieTest::TrieTest()
 
 void TrieTest::test_index()
 {
-    int in[] = {0, 8, 25, 26, 57};
-
-    int t[5];
-
-    t[0] = Node_p::index(QChar('a'));
-    t[1] = Node_p::index(QChar('i'));
-    t[2] = Node_p::index(QChar('z'));
-    t[3] = Node_p::index(QString("а")[0]);
-    t[4] = Node_p::index(QString("я")[0]);
-
-    for (int i = 0; i < 4; i++)
+    for (int i = 'a'; i <= 'z'; i++)
     {
-        QCOMPARE(t[i], in[i]);
+        QCOMPARE(Node_p::index(QChar(i)), i-'a');
+    }
+
+    QString ru = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
+    for (int i = 0; i < ru.size(); i++)
+    {
+        QCOMPARE(Node_p::index(ru[i]), i+26);
     }
 }
 
 void TrieTest::test_letter()
 {
-    int in[] = {0, 8, 25, 26, 57};
+    for (int i = 'a'; i <= 'z'; i++)
+    {
+        QCOMPARE(Node_p::letter(i-'a'), QChar(i));
+    }
 
-    QCOMPARE(Node_p::letter(in[0]), QChar('a'));
-    QCOMPARE(Node_p::letter(in[1]), QChar('i'));
-    QCOMPARE(Node_p::letter(in[2]), QChar('z'));
-    QCOMPARE(Node_p::letter(in[3]), QString("а")[0]);
-    QCOMPARE(Node_p::letter(in[4]), QString("я")[0]);
+    QString ru = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
+    for (int i = 0; i < ru.size(); i++)
+    {
+        QCOMPARE(Node_p::letter(i+26), ru[i]);
+    }
 }
 
-void TrieTest::test_words()
+void TrieTest::test_contains_addWord()
 {
     QStringList words;
-    words << "prefirststr";
-    words << "presecond-str";
-    words << "preтретьястрока";
-    words << "preчетвертая-строка";
+    QString buf;
 
+    for (int i = 'a'; i <= 'z'; i++)
+    {
+        buf.append(QChar(i));
+        words << buf;
+    }
+
+    buf.clear();
+    QString ru = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
+    for (int i = 0; i < ru.size(); i++)
+    {
+        buf.append(ru[i]);
+        words << buf;
+    }
 
     Trie trie;
 
     foreach (QString word, words)
     {
+        QCOMPARE(trie.contains(word), false);
         trie.addWord(word);
+        QCOMPARE(trie.contains(word), true);
     }
-
-    QCOMPARE(trie.words("pre"), words);
-}
-
-void TrieTest::test_contains()
-{
-    QStringList words1;
-    words1 << "prefirststr";
-    words1 << "presecond-str";
-    words1 << "preтретьястрока";
-    words1 << "preчетвертая-строка";
-
-    Trie trie;
-
-    foreach (QString word, words1)
-    {
-        trie.addWord(word);
-    }
-
-    QStringList words2;
-    words2 << "firststr";
-    words2 << "second-str";
-    words2 << "третьястрока";
-    words2 << "четвертая-строка";
-
-    foreach (QString word, words1)
-    {
-        QCOMPARE( trie.contains(word), true);
-    }
-
-    foreach (QString word, words2)
-    {
-        QCOMPARE( trie.contains(word), false);
-    }
-
 }
 
 void TrieTest::test_remove()
 {
     QStringList words;
-    words << "prefirststr";
-    words << "presecond-str";
-    words << "preтретьястрока";
-    words << "preчетвертая-строка";
+    QString buf;
 
+    for (int i = 'a'; i <= 'z'; i++)
+    {
+        buf.append(QChar(i));
+        words << buf;
+    }
+
+    buf.clear();
+    QString ru = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
+    for (int i = 0; i < ru.size(); i++)
+    {
+        buf.append(ru[i]);
+        words << buf;
+    }
 
     Trie trie;
 
@@ -121,12 +107,51 @@ void TrieTest::test_remove()
 
     foreach (QString word, words)
     {
-        QCOMPARE( trie.contains(word), true);
+        QCOMPARE(trie.contains(word), true);
         trie.remove(word);
-        QCOMPARE( trie.contains(word), false);
+        QCOMPARE(trie.contains(word), false);
     }
 }
 
+void TrieTest::test_words()
+{
+    QStringList wordsEn;
+    QString buf;
+
+    for (int i = 'a'; i <= 'z'; i++)
+    {
+        buf.append(QChar(i));
+        wordsEn << buf;
+    }
+
+    buf.clear();
+
+    QStringList wordsRu;
+    QString ru = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
+    for (int i = 0; i < ru.size(); i++)
+    {
+        buf.append(ru[i]);
+        wordsRu << buf;
+    }
+
+    Trie trie;
+
+    foreach (QString word, wordsEn)
+    {
+        trie.addWord(word);
+    }
+
+    foreach (QString word, wordsRu)
+    {
+        trie.addWord(word);
+    }
+
+    wordsEn.removeOne("a"); //en a
+    wordsRu.removeOne("а"); //ru a
+
+    QCOMPARE(trie.words("a", -1), wordsEn); //en a
+    QCOMPARE(trie.words("а", -1), wordsRu); //ru a
+}
 
 QTEST_APPLESS_MAIN(TrieTest)
 

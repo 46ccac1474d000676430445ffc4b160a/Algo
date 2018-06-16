@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Widget_t {
-    QByteArrayData data[18];
-    char stringdata0[266];
+    QByteArrayData data[20];
+    char stringdata0[285];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -48,7 +48,9 @@ QT_MOC_LITERAL(13, 162, 16), // "on_repaintVertex"
 QT_MOC_LITERAL(14, 179, 14), // "on_repaintEdge"
 QT_MOC_LITERAL(15, 194, 30), // "on_restoreColorsButton_clicked"
 QT_MOC_LITERAL(16, 225, 19), // "on_traversalStarted"
-QT_MOC_LITERAL(17, 245, 20) // "on_traversalFinished"
+QT_MOC_LITERAL(17, 245, 20), // "on_traversalFinished"
+QT_MOC_LITERAL(18, 266, 13), // "on_curentPath"
+QT_MOC_LITERAL(19, 280, 4) // "list"
 
     },
     "Widget\0loadFile\0\0filename\0"
@@ -58,7 +60,8 @@ QT_MOC_LITERAL(17, 245, 20) // "on_traversalFinished"
     "on_curentVertex\0Vertex*\0v\0on_curentEdge\0"
     "Edge*\0e\0on_repaintVertex\0on_repaintEdge\0"
     "on_restoreColorsButton_clicked\0"
-    "on_traversalStarted\0on_traversalFinished"
+    "on_traversalStarted\0on_traversalFinished\0"
+    "on_curentPath\0list"
 };
 #undef QT_MOC_LITERAL
 
@@ -68,7 +71,7 @@ static const uint qt_meta_data_Widget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -76,17 +79,18 @@ static const uint qt_meta_data_Widget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   69,    2, 0x08 /* Private */,
-       4,    0,   72,    2, 0x08 /* Private */,
-       5,    0,   73,    2, 0x08 /* Private */,
-       6,    0,   74,    2, 0x08 /* Private */,
-       7,    1,   75,    2, 0x08 /* Private */,
-      10,    1,   78,    2, 0x08 /* Private */,
-      13,    1,   81,    2, 0x08 /* Private */,
-      14,    1,   84,    2, 0x08 /* Private */,
-      15,    0,   87,    2, 0x08 /* Private */,
-      16,    0,   88,    2, 0x08 /* Private */,
-      17,    0,   89,    2, 0x08 /* Private */,
+       1,    1,   74,    2, 0x08 /* Private */,
+       4,    0,   77,    2, 0x08 /* Private */,
+       5,    0,   78,    2, 0x08 /* Private */,
+       6,    0,   79,    2, 0x08 /* Private */,
+       7,    1,   80,    2, 0x08 /* Private */,
+      10,    1,   83,    2, 0x08 /* Private */,
+      13,    1,   86,    2, 0x08 /* Private */,
+      14,    1,   89,    2, 0x08 /* Private */,
+      15,    0,   92,    2, 0x08 /* Private */,
+      16,    0,   93,    2, 0x08 /* Private */,
+      17,    0,   94,    2, 0x08 /* Private */,
+      18,    1,   95,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -100,6 +104,7 @@ static const uint qt_meta_data_Widget[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::QStringList,   19,
 
        0        // eod
 };
@@ -121,6 +126,7 @@ void Widget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 8: _t->on_restoreColorsButton_clicked(); break;
         case 9: _t->on_traversalStarted(); break;
         case 10: _t->on_traversalFinished(); break;
+        case 11: _t->on_curentPath((*reinterpret_cast< QStringList(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -151,13 +157,13 @@ int Widget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 12;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 12)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 11;
+        _id -= 12;
     }
     return _id;
 }

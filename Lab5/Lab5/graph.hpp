@@ -62,12 +62,11 @@ protected:
     virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *e);
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *e);
     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *e);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 public:
     Vertex(const QString &name);
     virtual ~Vertex();
-
-    //virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     QString name() const;
 

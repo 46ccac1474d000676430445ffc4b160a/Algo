@@ -86,11 +86,6 @@ Vertex::~Vertex()
     }
 }
 
-//void Vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-//{
-//    QGraphicsEllipseItem::paint(painter, option, widget);
-//}
-
 QLinkedList<Edge *> Vertex::edges() const
 { return m_edges; }
 
@@ -161,6 +156,16 @@ void Vertex::hoverMoveEvent(QGraphicsSceneHoverEvent *e)
 {
     setCursor(QCursor(Qt::OpenHandCursor));
     e->ignore();
+}
+
+void Vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QGraphicsEllipseItem::paint(painter, option, widget);
+
+    int w = QFontMetrics(painter->font()).width(name());
+    QPointF p = boundingRect().adjusted(rect().width()/2-w/2, rect().height()/2, 0, 0).topLeft();
+
+    painter->drawText( p, name());
 }
 
 

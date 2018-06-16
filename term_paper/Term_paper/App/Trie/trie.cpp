@@ -22,12 +22,13 @@ bool Node_p::isEmpty()
         if (val != nullptr) return false;
     }
 
-    return true;
+    return !isEnd;
 }
 
 int Node_p::index(const QChar &c)
 {
-    int index = ( c.row() << 8 ) | c.cell();
+    QChar ch = c.toLower();
+    int index = ( ch.row() << 8 ) | ch.cell();
 
     if (97 <= index && index <= 122) return index - 97;
     else if (1072 <= index && index <= 1103) return (index - 1072) + 26;
@@ -79,15 +80,17 @@ void Trie::p_words(Node_p *node, QString word, QStringList &list, int n)
     }
 }
 
-Trie::Trie() :
-    root(new Node_p())
-{
-}
+
+
+Trie Trie::p_trie = Trie();
+
+Trie &Trie::trie()
+{ return p_trie; }
 
 Trie::~Trie()
 { delete root; }
 
-bool Trie::isEmpty()
+bool Trie::isEmpty() const
 { return root->isEmpty(); }
 
 QStringList Trie::words(const QString &preffix, int n) const
@@ -110,7 +113,7 @@ QStringList Trie::words(const QString &preffix, int n) const
     return s_list;
 }
 
-bool Trie::contains(const QString &word)
+bool Trie::contains(const QString &word) const
 {
     Node_p *node = root;
 
@@ -150,4 +153,22 @@ void Trie::remove(const QString &word)
         node = t;
     }
     node->isEnd = false;
+
+    node = root;
+    foreach (const QChar &c, word)
+    {
+        Node_p *t = node->node(c);
+        if (t != nullptr && t->isEmpty())
+        {
+            delete t;
+            node->node(c) = nullptr;
+            return;
+        }
+    }
+}
+
+void Trie::clear()
+{
+    delete root;
+    root = new Node_p();
 }

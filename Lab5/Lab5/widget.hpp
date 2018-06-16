@@ -46,6 +46,8 @@ private slots:
     void on_repaintVertex(Vertex *v);
     void on_repaintEdge(Edge *e);
 
+    void getLog(const QString &log);
+
     void on_restoreColorsButton_clicked();
 
     void on_traversalStarted();

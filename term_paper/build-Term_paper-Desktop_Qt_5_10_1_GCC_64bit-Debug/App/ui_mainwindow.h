@@ -18,7 +18,6 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QTabWidget>
-#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -47,7 +46,6 @@ public:
     QTabWidget *tabWidget;
     QWidget *tab;
     QVBoxLayout *verticalLayout_2;
-    QTextEdit *textEdit;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuEdit;
@@ -104,11 +102,6 @@ public:
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        textEdit = new QTextEdit(tab);
-        textEdit->setObjectName(QStringLiteral("textEdit"));
-
-        verticalLayout_2->addWidget(textEdit);
-
         tabWidget->addTab(tab, QString());
 
         verticalLayout->addWidget(tabWidget);
