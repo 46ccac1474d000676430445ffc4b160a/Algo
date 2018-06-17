@@ -52,7 +52,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(400, 300);
+        MainWindow->resize(640, 480);
         actionExit = new QAction(MainWindow);
         actionExit->setObjectName(QStringLiteral("actionExit"));
         actionUndo = new QAction(MainWindow);
@@ -100,7 +100,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 400, 22));
+        menuBar->setGeometry(QRect(0, 0, 640, 22));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuEdit = new QMenu(menuBar);
@@ -186,6 +186,9 @@ public:
         actionSave_all->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+S", nullptr));
 #endif // QT_NO_SHORTCUT
         actionClose->setText(QApplication::translate("MainWindow", "Close", nullptr));
+#ifndef QT_NO_SHORTCUT
+        actionClose->setShortcut(QApplication::translate("MainWindow", "Ctrl+W", nullptr));
+#endif // QT_NO_SHORTCUT
         actionClose_all->setText(QApplication::translate("MainWindow", "Close all", nullptr));
         actionSave_as->setText(QApplication::translate("MainWindow", "Save as...", nullptr));
         actionNew_file->setText(QApplication::translate("MainWindow", "New file", nullptr));
