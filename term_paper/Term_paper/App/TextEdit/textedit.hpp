@@ -2,7 +2,9 @@
 #define TEXTEDIT_HPP
 
 #include <QTextEdit>
-#include <QKeyEvent>
+#include <QListWidget>
+#include <QShortcut>
+#include <QMutex>
 
 #include "Trie/trie.hpp"
 
@@ -13,11 +15,22 @@ class TextEdit : public QTextEdit
     Q_OBJECT
 
     int last_pos;
+    QListWidget *suggestions;
 
-    static QString p_firstWordFind_Helper(QTextDocument *doc, int pos);
+    QMutex suggestionsClear_mutex;
+
+    QShortcut *callSuggestionsShortcut;
+    QShortcut *hideSuggestionsShortcut;
+    QShortcut *arrowUpShortcut;
+    QShortcut *arrowDownShortcut;
+    QShortcut *chooseSuggestionShortcut;
 
 private slots:
-    void on_textCursorChanged(const QTextCursor &cursor);
+    void callSuggestions(const QString &preffix);
+    void hideSuggestions();
+
+    void on_textCursorChanged();
+    void on_suggestionChoosen(QListWidgetItem *item);
 
 public:
     explicit TextEdit(QWidget *parent = nullptr);

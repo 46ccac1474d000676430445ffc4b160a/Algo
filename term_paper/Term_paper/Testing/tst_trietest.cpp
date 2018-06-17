@@ -63,20 +63,21 @@ void TrieTest::test_letter()
 void TrieTest::test_contains_addWord()
 {
     QStringList words;
-    QString buf;
 
-    for (int i = 'a'; i <= 'z'; i++)
+    QFile f(QDir::currentPath()+"/dict.txt");
+    if (f.open(QIODevice::ReadOnly))
     {
-        buf.append(QChar(i));
-        words << buf;
+        QString buf(f.readAll());
+        buf.remove('\r');
+
+        words = buf.split('\n');
+
+        f.close();
     }
-
-    buf.clear();
-    QString ru = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
-    for (int i = 0; i < ru.size(); i++)
+    else
     {
-        buf.append(ru[i]);
-        words << buf;
+        QWARN("dict.txt not open");
+        return;
     }
 
     Trie trie;
@@ -88,6 +89,7 @@ void TrieTest::test_contains_addWord()
 
     foreach (QString word, words)
     {
+        if (trie.contains(word)) qWarning() << "trie already contains:" << word;
         QCOMPARE(trie.contains(word), false);
         trie.addWord(word);
         QCOMPARE(trie.contains(word), true);
@@ -175,6 +177,9 @@ void TrieTest::test_words()
     QCOMPARE(trie.words("а", -1), wordsRu); //ru a
 
     QCOMPARE(trie.words("Zorg", -1), QStringList());
+
+    trie.addWord("Анубис");
+    QCOMPARE(trie.words("Ану"), QStringList() << "Анубис");
 }
 
 QTEST_APPLESS_MAIN(TrieTest)
