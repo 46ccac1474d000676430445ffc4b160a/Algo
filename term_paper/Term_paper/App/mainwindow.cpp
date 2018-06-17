@@ -7,19 +7,24 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QString str;
-    for (int i = 'a'; i <= 'z'; i++)
+    QFile f(QDir::currentPath()+"/dict.txt");
+    if (f.open(QIODevice::ReadOnly))
     {
-        str.append(QChar(i));
-        Trie::trie().addWord(str);
+        QString buf(f.readAll());
+        buf.remove('\r');
+        QStringList list = buf.split('\n', QString::SkipEmptyParts);
+        f.close();
+
+        foreach (auto val, list)
+        {
+            Trie::obj() << val;
+        }
     }
+    else qDebug() << "dict.txt not open";
 
     connect(ui->actionExit, &QAction::triggered, this, &MainWindow::close);
 
-
-    QVBoxLayout *vlay = new QVBoxLayout();
-    vlay->addWidget(new TextEdit());
-    ui->tab->setLayout(vlay);
+    ui->tabWidget->addTab(new TextEdit(), "Sometab");
 }
 
 MainWindow::~MainWindow()

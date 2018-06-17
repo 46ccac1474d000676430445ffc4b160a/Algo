@@ -12,34 +12,16 @@ class TextEdit : public QTextEdit
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString buffer READ buffer WRITE setBuffer NOTIFY bufferChanged)
+    int last_pos;
 
-    QString m_buffer;
+    static QString p_firstWordFind_Helper(QTextDocument *doc, int pos);
 
-protected:
-    void keyReleaseEvent(QKeyEvent *e);
+private slots:
+    void on_textCursorChanged(const QTextCursor &cursor);
 
 public:
     explicit TextEdit(QWidget *parent = nullptr);
 
-    QString buffer() const
-    {
-        return m_buffer;
-    }
-
-signals:
-
-    void bufferChanged(QString buffer);
-
-public slots:
-void setBuffer(QString buffer)
-{
-    if (m_buffer == buffer)
-        return;
-
-    m_buffer = buffer;
-    emit bufferChanged(m_buffer);
-}
 };
 
 #endif // TEXTEDIT_HPP

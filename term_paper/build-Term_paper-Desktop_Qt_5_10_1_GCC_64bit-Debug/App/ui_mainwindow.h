@@ -44,8 +44,6 @@ public:
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
-    QWidget *tab;
-    QVBoxLayout *verticalLayout_2;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuEdit;
@@ -96,13 +94,6 @@ public:
         tabWidget->setDocumentMode(false);
         tabWidget->setTabsClosable(true);
         tabWidget->setMovable(true);
-        tab = new QWidget();
-        tab->setObjectName(QStringLiteral("tab"));
-        verticalLayout_2 = new QVBoxLayout(tab);
-        verticalLayout_2->setSpacing(6);
-        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        tabWidget->addTab(tab, QString());
 
         verticalLayout->addWidget(tabWidget);
 
@@ -141,7 +132,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(-1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -201,7 +192,6 @@ public:
 #ifndef QT_NO_SHORTCUT
         actionNew_file->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", nullptr));
 #endif // QT_NO_SHORTCUT
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Untiled", nullptr));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", nullptr));
         menuEdit->setTitle(QApplication::translate("MainWindow", "Edit", nullptr));
     } // retranslateUi

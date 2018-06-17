@@ -26,13 +26,18 @@ void TrieTest::test_index()
 {
     for (int i = 'a'; i <= 'z'; i++)
     {
-        QCOMPARE(Node_p::index(QChar(i)), i-'a');
+        QCOMPARE(Node_p::p_indexHelper(QChar(i)), i-'a');
     }
 
     QString ru = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
     for (int i = 0; i < ru.size(); i++)
     {
-        QCOMPARE(Node_p::index(ru[i]), i+26);
+        QCOMPARE(Node_p::p_indexHelper(ru[i]), i+26);
+    }
+
+    for (int i = '0'; i <= '9'; i++)
+    {
+        QCOMPARE(Node_p::p_indexHelper(QChar(i)), i-'0'+59);
     }
 }
 
@@ -40,13 +45,18 @@ void TrieTest::test_letter()
 {
     for (int i = 'a'; i <= 'z'; i++)
     {
-        QCOMPARE(Node_p::letter(i-'a'), QChar(i));
+        QCOMPARE(Node_p::p_letterHelper(i-'a'), QChar(i));
     }
 
     QString ru = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
     for (int i = 0; i < ru.size(); i++)
     {
-        QCOMPARE(Node_p::letter(i+26), ru[i]);
+        QCOMPARE(Node_p::p_letterHelper(i+26), ru[i]);
+    }
+
+    for (int i = '0'; i <= '9'; i++)
+    {
+        QCOMPARE(Node_p::p_letterHelper(i-'0'+59), QChar(i));
     }
 }
 
@@ -74,7 +84,17 @@ void TrieTest::test_contains_addWord()
     foreach (QString word, words)
     {
         QCOMPARE(trie.contains(word), false);
+    }
+
+    foreach (QString word, words)
+    {
+        QCOMPARE(trie.contains(word), false);
         trie.addWord(word);
+        QCOMPARE(trie.contains(word), true);
+    }
+
+    foreach (QString word, words)
+    {
         QCOMPARE(trie.contains(word), true);
     }
 }
@@ -105,8 +125,10 @@ void TrieTest::test_remove()
         trie.addWord(word);
     }
 
+    int c = 0;
     foreach (QString word, words)
     {
+        c++;
         QCOMPARE(trie.contains(word), true);
         trie.remove(word);
         QCOMPARE(trie.contains(word), false);
@@ -151,6 +173,8 @@ void TrieTest::test_words()
 
     QCOMPARE(trie.words("a", -1), wordsEn); //en a
     QCOMPARE(trie.words("а", -1), wordsRu); //ru a
+
+    QCOMPARE(trie.words("Zorg", -1), QStringList());
 }
 
 QTEST_APPLESS_MAIN(TrieTest)

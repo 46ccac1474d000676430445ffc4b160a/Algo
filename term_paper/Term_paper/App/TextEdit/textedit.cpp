@@ -1,26 +1,38 @@
 #include "textedit.hpp"
 
-void TextEdit::keyReleaseEvent(QKeyEvent *e)
+QString TextEdit::p_firstWordFind_Helper(QTextDocument *doc, int pos)
 {
-    QChar ch(e->key());
-
-    if (ch.isLetter() || ch == '-')
+    QString word;
+    while (pos >= 0)
     {
-        m_buffer.append(ch.toLower());
+        QChar ch = doc->characterAt(pos);
 
-        if (m_buffer.size() > 3)
-        {
-            qDebug() << Trie::trie().words(m_buffer);
-        }
+        if (ch.isLetter() || ch == '-') word.prepend(ch);
+        else break;
+
+        pos--;
     }
-    else if (ch.isSpace())
+    return word;
+}
+
+void TextEdit::on_textCursorChanged(const QTextCursor &cursor)
+{
+    int pos = cursor.position()-1;
+
+    if (pos - last_pos == 1)
     {
-        m_buffer.clear();
+        QString buf = p_firstWordFind_Helper(document(), pos);
+
+        if (buf.size() >= 3) qDebug() << Trie::obj().words(buf, 5);
     }
-    else QTextEdit::keyReleaseEvent(e);
+
+    last_pos = cursor.position()-1;
 }
 
 TextEdit::TextEdit(QWidget *parent) :
-    QTextEdit(parent)
+    QTextEdit(parent),
+    last_pos(textCursor().position())
 {
+    connect(document(), &QTextDocument::cursorPositionChanged, this, &TextEdit::on_textCursorChanged);
 }
+

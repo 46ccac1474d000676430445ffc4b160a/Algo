@@ -2,6 +2,7 @@
 #define MAINWINDOW_HPP
 
 #include <QMainWindow>
+#include <QDir>
 
 #include <TextEdit/textedit.hpp>
 #include "Trie/trie.hpp"

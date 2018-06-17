@@ -9,6 +9,8 @@
 
 #include <QDebug>
 
+static const int CAP = 70;
+
 class Node_p
 {
     friend class Trie;
@@ -16,16 +18,26 @@ class Node_p
     friend class TrieTest;
 #endif
 
-    QVector<Node_p *> d;
+//STATIC
+    static int p_indexHelper(const QChar &c);
+    static QChar p_letterHelper(int p_indexHelper);
+
+//FIELDS
+    Node_p *m_parent;
+
+    Node_p *d[CAP] = {0x0};
+
     bool isEnd;
 
-    Node_p();
+//METHODS
+    Node_p(Node_p *parent = 0x0);
 
-    Node_p *&node(const QChar &c);
-    bool isEmpty();
+    Node_p *parent() const;
+    Node_p *at(const QChar &c) const;
+    bool isEmpty() const;
 
-    static int index(const QChar &c);
-    static QChar letter(int index);
+    void set(const QChar &c, Node_p *val);
+    void setParent(Node_p *parent);
 
 public:
     virtual ~Node_p();
@@ -40,26 +52,34 @@ class Trie
     friend class TrieTest;
 #endif
 
+//STATIC
+    static void p_wordsHelper(Node_p *node, QString word, QStringList &list, int n);
+
+    static Trie s_trie;
+
+public:
+    static Trie &obj();
+
+private:
+
+//FIELDS
     Node_p *root;
 
-    static void p_words(Node_p *node, QString word, QStringList &list, int n);
-
+//METHODS
     Trie() : root(new Node_p()) {}
     Trie(const Trie &){}
     Trie(Trie &){}
 
-    static Trie p_trie;
-
 public:
-    static Trie &trie();
     virtual ~Trie();
 
     bool isEmpty() const;
 
-    QStringList words(const QString &preffix, int n = 5) const;
+    QStringList words(const QString &preffix, int n = -1) const;
     bool contains(const QString &word) const;
 
     void addWord(const QString &word);
+    Trie &operator <<(const QString &word);
     void remove(const QString &word);
     void clear();
 
