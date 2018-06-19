@@ -41,12 +41,14 @@ public:
     QAction *actionClose_all;
     QAction *actionSave_as;
     QAction *actionNew_file;
+    QAction *actionClose_if_no_tabs;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuEdit;
+    QMenu *menuOptions;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -83,6 +85,9 @@ public:
         actionSave_as->setObjectName(QStringLiteral("actionSave_as"));
         actionNew_file = new QAction(MainWindow);
         actionNew_file->setObjectName(QStringLiteral("actionNew_file"));
+        actionClose_if_no_tabs = new QAction(MainWindow);
+        actionClose_if_no_tabs->setObjectName(QStringLiteral("actionClose_if_no_tabs"));
+        actionClose_if_no_tabs->setCheckable(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -105,10 +110,13 @@ public:
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuEdit = new QMenu(menuBar);
         menuEdit->setObjectName(QStringLiteral("menuEdit"));
+        menuOptions = new QMenu(menuBar);
+        menuOptions->setObjectName(QStringLiteral("menuOptions"));
         MainWindow->setMenuBar(menuBar);
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());
+        menuBar->addAction(menuOptions->menuAction());
         menuFile->addAction(actionNew_file);
         menuFile->addAction(actionOpen_file);
         menuFile->addSeparator();
@@ -129,6 +137,7 @@ public:
         menuEdit->addAction(actionDelete);
         menuEdit->addSeparator();
         menuEdit->addAction(actionSelect_all);
+        menuOptions->addAction(actionClose_if_no_tabs);
 
         retranslateUi(MainWindow);
 
@@ -195,8 +204,10 @@ public:
 #ifndef QT_NO_SHORTCUT
         actionNew_file->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", nullptr));
 #endif // QT_NO_SHORTCUT
+        actionClose_if_no_tabs->setText(QApplication::translate("MainWindow", "Close if no tabs", nullptr));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", nullptr));
         menuEdit->setTitle(QApplication::translate("MainWindow", "Edit", nullptr));
+        menuOptions->setTitle(QApplication::translate("MainWindow", "Options", nullptr));
     } // retranslateUi
 
 };

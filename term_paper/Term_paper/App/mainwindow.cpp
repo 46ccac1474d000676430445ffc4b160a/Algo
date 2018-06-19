@@ -1,6 +1,13 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    on_actionClose_all_triggered();
+
+    QMainWindow::closeEvent(event);
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -22,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     else qDebug() << "dict.txt not open";
 
+    ui->actionClose_if_no_tabs->setChecked(true);
     ui->tabWidget->addTab(new TextEdit(), "Untilted");
 }
 
@@ -130,31 +138,58 @@ void MainWindow::on_actionSave(int index)
 
 void MainWindow::on_actionSave_all_triggered()
 {
-
+    for (int i = 0; i < ui->tabWidget->count(); i++)
+    {
+        TextEdit *textEdit = static_cast<TextEdit *>(ui->tabWidget->widget(i));
+        if (!textEdit->saved())
+        {
+            on_actionSave(i);
+        }
+    }
 }
 
 void MainWindow::on_actionClose_triggered()
 {
-
+    on_tabWidget_tabCloseRequested(ui->tabWidget->currentIndex());
 }
 
 void MainWindow::on_actionClose_all_triggered()
 {
-
+    while(ui->tabWidget->count() != 0)
+    {
+        on_tabWidget_tabCloseRequested(ui->tabWidget->currentIndex());
+    }
 }
 
 void MainWindow::on_actionSave_as_triggered()
 {
-
+    on_actionSave(ui->tabWidget->currentIndex());
 }
 
 void MainWindow::on_actionNew_file_triggered()
 {
-
+    ui->tabWidget->addTab(new TextEdit(), "Untilted");
 }
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
-    on_actionSave(index);
-    if (static_cast<TextEdit *>(ui->tabWidget->widget(index))->saved()) ui->tabWidget->removeTab(index);
+    TextEdit *textEdit = static_cast<TextEdit *>(ui->tabWidget->widget(index));
+
+    if (!textEdit->saved())
+    {
+        int ans = QMessageBox::question(this, "File save", QString("Save changes to file before closing?"),
+                                        QMessageBox::No,
+                                        QMessageBox::Cancel,
+                                        QMessageBox::Yes);
+
+        if (ans == QMessageBox::Cancel) return;
+        if (ans == QMessageBox::Yes) on_actionSave(index);
+        if (ans == QMessageBox::No || textEdit->saved())
+        {
+            ui->tabWidget->removeTab(index);
+            textEdit->deleteLater();
+        }
+    }
+
+    if (ui->tabWidget->count() == 0 && ui->actionClose_if_no_tabs->isChecked()) close();
 }
