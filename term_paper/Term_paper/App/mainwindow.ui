@@ -78,9 +78,16 @@
     </property>
     <addaction name="actionClose_if_no_tabs"/>
    </widget>
+   <widget class="QMenu" name="menuText_compliting">
+    <property name="title">
+     <string>Text compliting</string>
+    </property>
+    <addaction name="actionDictionary"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuOptions"/>
+   <addaction name="menuText_compliting"/>
   </widget>
   <action name="actionExit">
    <property name="text">
@@ -202,6 +209,11 @@
    </property>
    <property name="text">
     <string>Close if no tabs</string>
+   </property>
+  </action>
+  <action name="actionDictionary">
+   <property name="text">
+    <string>Dictionary</string>
    </property>
   </action>
  </widget>

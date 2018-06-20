@@ -3,9 +3,14 @@
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    on_actionClose_all_triggered();
+    if ( (ui->tabWidget->count() == 0 && ui->actionClose_if_no_tabs->isChecked()) ||
+         QMessageBox::question(this, "Close", "Want to close?") == QMessageBox::Yes)
+    {
+        on_actionClose_all_triggered();
 
-    QMainWindow::closeEvent(event);
+        QMainWindow::closeEvent(event);
+    }
+    else event->ignore();
 }
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -155,9 +160,10 @@ void MainWindow::on_actionClose_triggered()
 
 void MainWindow::on_actionClose_all_triggered()
 {
-    while(ui->tabWidget->count() != 0)
+    int n = ui->tabWidget->count();
+    while(n--)
     {
-        on_tabWidget_tabCloseRequested(ui->tabWidget->currentIndex());
+        on_tabWidget_tabCloseRequested(0);
     }
 }
 
@@ -192,4 +198,9 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     }
 
     if (ui->tabWidget->count() == 0 && ui->actionClose_if_no_tabs->isChecked()) close();
+}
+
+void MainWindow::on_actionDictionary_triggered()
+{
+
 }

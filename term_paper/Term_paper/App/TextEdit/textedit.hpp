@@ -6,9 +6,12 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QShortcut>
-#include <QMutex>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QWindow>
 
 #include "Trie/trie.hpp"
+#include "suggestionslist.hpp"
 
 #include <QDebug>
 
@@ -17,32 +20,24 @@ class TextEdit : public QTextEdit
     Q_OBJECT
 
     int last_pos;
-    QListWidget *suggestions;
-
-    QMutex suggestionsClear_mutex;
+    SuggestionsList *suggestions;
 
     bool m_saved;
     Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
 
     QShortcut *callSuggestionsShortcut;
     QShortcut *hideSuggestionsShortcut;
-    QShortcut *arrowUpShortcut;
-    QShortcut *arrowDownShortcut;
-    QShortcut *chooseSuggestionShortcut;
 
     QString m_fileName;
 
 private slots:
-    void callSuggestions(const QString &preffix);
-    void hideSuggestions();
-
+    void on_callSuggestions(int n = 3);
     void on_textCursorChanged();
-    void on_suggestionChoosen(QListWidgetItem *item);
 
 public slots:
     bool open(const QString &file);
     bool save();
-    void setFileName(QString fileName);
+    void setFileName(const QString &fileName);
 
 public:
     explicit TextEdit(QWidget *parent = nullptr);

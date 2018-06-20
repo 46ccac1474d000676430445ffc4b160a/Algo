@@ -13,13 +13,17 @@ DESTDIR = ../../Build
 HEADERS = \
    $$PWD/Trie/trie.hpp \
    $$PWD/mainwindow.hpp \
-    TextEdit/textedit.hpp
+    TextEdit/textedit.hpp \
+    TextEdit/suggestionslist.hpp \
+    TextEdit/textedit_p.hpp
 
 SOURCES = \
    $$PWD/Trie/trie.cpp \
    $$PWD/main.cpp \
    $$PWD/mainwindow.cpp \
-    TextEdit/textedit.cpp
+    TextEdit/textedit.cpp \
+    TextEdit/suggestionslist.cpp \
+    TextEdit/textedit_p.cpp
 
 FORMS = \
     $$PWD/mainwindow.ui

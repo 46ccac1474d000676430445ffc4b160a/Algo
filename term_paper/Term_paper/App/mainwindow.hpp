@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QCloseEvent>
 
 #include <TextEdit/textedit.hpp>
 #include "Trie/trie.hpp"
@@ -20,7 +21,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 protected:
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) override;
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -60,6 +61,8 @@ private slots:
     void on_actionNew_file_triggered();
 
     void on_tabWidget_tabCloseRequested(int index);
+
+    void on_actionDictionary_triggered();
 
 private:
     Ui::MainWindow *ui;
