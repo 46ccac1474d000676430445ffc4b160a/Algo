@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         QString buf(f.readAll());
         buf.remove('\r');
+        buf.replace(QChar::Space, '\n');
         QStringList list = buf.split('\n', QString::SkipEmptyParts);
         f.close();
 
@@ -179,28 +180,24 @@ void MainWindow::on_actionNew_file_triggered()
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
-    TextEdit *textEdit = static_cast<TextEdit *>(ui->tabWidget->widget(index));
-
-    if (!textEdit->saved())
+    if (ui->tabWidget->count() > 0)
     {
-        int ans = QMessageBox::question(this, "File save", QString("Save changes to file before closing?"),
-                                        QMessageBox::No,
-                                        QMessageBox::Cancel,
-                                        QMessageBox::Yes);
+        TextEdit *textEdit = static_cast<TextEdit *>(ui->tabWidget->widget(index));
 
-        if (ans == QMessageBox::Cancel) return;
-        if (ans == QMessageBox::Yes) on_actionSave(index);
-        if (ans == QMessageBox::No || textEdit->saved())
+        if (!textEdit->saved())
         {
-            ui->tabWidget->removeTab(index);
-            textEdit->deleteLater();
+            int ans = QMessageBox::question(this, "File save", QString("Save changes to file before closing?"),
+                                            QMessageBox::No,
+                                            QMessageBox::Cancel,
+                                            QMessageBox::Yes);
+
+            if (ans == QMessageBox::Cancel) return;
+            if (ans == QMessageBox::Yes) on_actionSave(index);
         }
+
+        ui->tabWidget->removeTab(index);
+        textEdit->deleteLater();
+
+        if (ui->tabWidget->count() == 0 && ui->actionClose_if_no_tabs->isChecked()) close();
     }
-
-    if (ui->tabWidget->count() == 0 && ui->actionClose_if_no_tabs->isChecked()) close();
-}
-
-void MainWindow::on_actionDictionary_triggered()
-{
-
 }

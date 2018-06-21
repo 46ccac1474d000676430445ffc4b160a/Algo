@@ -82,7 +82,8 @@
     <property name="title">
      <string>Text compliting</string>
     </property>
-    <addaction name="actionDictionary"/>
+    <addaction name="actionLoad_dict_from_file"/>
+    <addaction name="actionShow_loaded_dict"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -211,9 +212,14 @@
     <string>Close if no tabs</string>
    </property>
   </action>
-  <action name="actionDictionary">
+  <action name="actionLoad_dict_from_file">
    <property name="text">
-    <string>Dictionary</string>
+    <string>Load dict from file</string>
+   </property>
+  </action>
+  <action name="actionShow_loaded_dict">
+   <property name="text">
+    <string>Show loaded dict</string>
    </property>
   </action>
  </widget>

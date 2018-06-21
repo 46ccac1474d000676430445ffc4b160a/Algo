@@ -62,8 +62,6 @@ private slots:
 
     void on_tabWidget_tabCloseRequested(int index);
 
-    void on_actionDictionary_triggered();
-
 private:
     Ui::MainWindow *ui;
 };

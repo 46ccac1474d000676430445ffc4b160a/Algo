@@ -53,7 +53,7 @@ bool TextEdit::open(const QString &file)
         QFile f(file);
         if(f.open(QIODevice::ReadOnly))
         {
-            setPlainText(QString(f.readAll()));
+            setText(QString(f.readAll()));
             f.close();
             setFileName(file);
             m_saved = true;
@@ -73,8 +73,7 @@ bool TextEdit::save()
     {
         f.write(toPlainText().toUtf8());
         f.close();
-        m_saved = true;
-        return true;
+        return m_saved = true;
     }
 
     return false;
@@ -94,7 +93,7 @@ TextEdit::TextEdit(QWidget *parent) :
     QTextEdit(parent),
     last_pos(textCursor().anchor()),
     suggestions(new SuggestionsList(this)),
-    m_saved(false),
+    m_saved(true),
     callSuggestionsShortcut(new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Space), this)),
     hideSuggestionsShortcut(new QShortcut(QKeySequence(Qt::Key_Escape), this))
 {

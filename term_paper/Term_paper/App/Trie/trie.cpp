@@ -140,13 +140,16 @@ void Trie::addWord(const QString &word)
 
     foreach (const QChar &c, word)
     {
-        Node_p *t = node->at(c);
-        if (t == 0x0)
+        if (Node_p::p_indexHelper(c) >= 0)
         {
-            t = new Node_p(node);
-            node->set(c, t);
+            Node_p *t = node->at(c);
+            if (t == 0x0)
+            {
+                t = new Node_p(node);
+                node->set(c, t);
+            }
+            node = t;
         }
-        node = t;
     }
     node->isEnd = true;
 }
@@ -161,7 +164,6 @@ void Trie::remove(const QString &word)
 {
     Node_p *node = root;
 
-    //QLinkedList<QChar>
     QString stack;
 
     foreach (const QChar &c, word)
