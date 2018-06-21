@@ -79,9 +79,6 @@ void GraphTraversal::p_widthSearch(Vertex *root, QLinkedList<QString> &visited)
         emit curentVertex(vertex);
         QThread::msleep(m_msecsPause);
 
-        QLinkedList<Edge *> v_edges;
-        QLinkedList<Vertex *> v_vertices;
-
 
         QLinkedList<Edge *> edges = vertex->edges();
         foreach (Edge *edge, edges)
@@ -102,20 +99,14 @@ void GraphTraversal::p_widthSearch(Vertex *root, QLinkedList<QString> &visited)
                 emit curentVertex(l_vertex);
                 QThread::msleep(m_msecsPause);
 
-                v_edges.prepend(edge);
-                v_vertices.prepend(l_vertex);
+                emit repaintVertex(l_vertex);
+                QThread::msleep(m_msecsPause);
+
+                emit repaintEdge(edge);
+                QThread::msleep(m_msecsPause);
             }
         }
 
-        int n = v_vertices.size();
-        while(n--)
-        {
-            emit repaintVertex(v_vertices.takeFirst());
-            QThread::msleep(m_msecsPause);
-
-            emit repaintEdge(v_edges.takeFirst());
-            QThread::msleep(m_msecsPause);
-        }
         emit repaintVertex(vertex);
         QThread::msleep(m_msecsPause);
     }
