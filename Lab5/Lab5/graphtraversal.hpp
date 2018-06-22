@@ -7,6 +7,7 @@
 #include "graph.hpp"
 
 #include <QLinkedList>
+#include <QSet>
 
 class GraphTraversal : public QObject
 {
@@ -16,8 +17,8 @@ class GraphTraversal : public QObject
 
     QMutex setRoot_Mutex;
 
-    void p_deepthSearch(Vertex *root, QLinkedList<QString> &visited, QString path);
-    void p_widthSearch(Vertex *root, QLinkedList<QString> &visited);
+    void p_deepthSearch(Vertex *root, QSet<QString> &visited, QString path);
+    void p_widthSearch(Vertex *root, QSet<QString> &visited, QHash<QString, QString> &parents);
 
     unsigned long m_msecsPause = 1500u;
 
