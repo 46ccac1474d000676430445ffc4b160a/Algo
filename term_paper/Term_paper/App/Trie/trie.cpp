@@ -138,18 +138,16 @@ void Trie::addWord(const QString &word)
 {
     Node_p *node = root;
 
-    foreach (const QChar &c, word)
+    foreach (QChar c, word)
     {
-        if (Node_p::p_indexHelper(c) >= 0)
+        if (Node_p::p_indexHelper(c) < 0) c = '-';
+        Node_p *t = node->at(c);
+        if (t == 0x0)
         {
-            Node_p *t = node->at(c);
-            if (t == 0x0)
-            {
-                t = new Node_p(node);
-                node->set(c, t);
-            }
-            node = t;
+            t = new Node_p(node);
+            node->set(c, t);
         }
+        node = t;
     }
     node->isEnd = true;
 }

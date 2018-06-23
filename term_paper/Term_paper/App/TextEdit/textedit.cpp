@@ -23,6 +23,20 @@ bool TextEdit::saved() const
 QString TextEdit::fileName() const
 { return m_fileName; }
 
+void TextEdit::contextMenuEvent(QContextMenuEvent *e)
+{
+    QMenu *menu = createStandardContextMenu();
+    menu->addSeparator();
+    menu->addAction("Add word to dict",
+                    [this](){
+                        QString text = textCursor().selectedText();
+                        if (!text.isEmpty()) Trie::obj().addWord(text);
+                    },
+                    QKeySequence("Ctrl+D"));
+    menu->exec(e->globalPos());
+    delete menu;
+}
+
 void TextEdit::on_callSuggestions(int n)
 {
     QString preffix = p_firstWordFind_Helper(document(), textCursor().anchor());
@@ -105,5 +119,6 @@ TextEdit::TextEdit(QWidget *parent) :
     });
     connect(hideSuggestionsShortcut, &QShortcut::activated,
             suggestions, &SuggestionsList::hideSuggestions);
+
 }
 

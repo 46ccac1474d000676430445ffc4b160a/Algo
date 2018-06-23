@@ -9,6 +9,9 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QWindow>
+#include <QAction>
+#include <QContextMenuEvent>
+#include <QMenu>
 
 #include "Trie/trie.hpp"
 #include "suggestionslist.hpp"
@@ -29,6 +32,9 @@ class TextEdit : public QTextEdit
     QShortcut *hideSuggestionsShortcut;
 
     QString m_fileName;
+
+protected:
+    void contextMenuEvent(QContextMenuEvent *e);
 
 private slots:
     void on_callSuggestions(int n = 3);
