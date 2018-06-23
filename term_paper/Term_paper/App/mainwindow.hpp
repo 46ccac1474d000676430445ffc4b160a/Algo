@@ -62,6 +62,16 @@ private slots:
 
     void on_tabWidget_tabCloseRequested(int index);
 
+    void on_currentTabChanged(int index);
+
+    void on_selectionChanged();
+
+    void on_actionAdd_selected_to_dict_triggered();
+
+    void on_actionLoad_dict_from_file_triggered();
+
+    void on_actionShow_current_dict_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

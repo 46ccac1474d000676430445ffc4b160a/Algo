@@ -19,23 +19,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QFile f(QDir::currentPath()+"/dict.txt");
-    if (f.open(QIODevice::ReadOnly))
-    {
-        QString buf(f.readAll());
-        buf.remove('\r');
-        buf.replace(QChar::Space, '\n');
-        QStringList list = buf.split('\n', QString::SkipEmptyParts);
-        f.close();
-
-        foreach (auto val, list)
-        {
-            Trie::obj() << val;
-        }
-    }
-    else qDebug() << "dict.txt not open";
+    connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::on_currentTabChanged);
 
     ui->actionClose_if_no_tabs->setChecked(true);
+    ui->actionAdd_selected_to_dict->setDisabled(true);
     ui->tabWidget->addTab(new TextEdit(), "Untilted");
 }
 
@@ -175,7 +162,8 @@ void MainWindow::on_actionSave_as_triggered()
 
 void MainWindow::on_actionNew_file_triggered()
 {
-    ui->tabWidget->addTab(new TextEdit(), "Untilted");
+    int index = ui->tabWidget->addTab(new TextEdit(), "Untilted");
+    ui->tabWidget->setCurrentIndex(index);
 }
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
@@ -199,5 +187,58 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
         textEdit->deleteLater();
 
         if (ui->tabWidget->count() == 0 && ui->actionClose_if_no_tabs->isChecked()) close();
+    }
+}
+
+void MainWindow::on_currentTabChanged(int index)
+{
+    if (ui->tabWidget->count() > 0)
+    {
+        TextEdit *te;
+        for (int i = 0; i < ui->tabWidget->count(); i++)
+        {
+            te = static_cast<TextEdit *>(ui->tabWidget->widget(i));
+            disconnect(te, &TextEdit::selectionChanged, this, &MainWindow::on_selectionChanged);
+        }
+
+        te = static_cast<TextEdit *>(ui->tabWidget->widget(index));
+        connect(te, &TextEdit::selectionChanged, this, &MainWindow::on_selectionChanged);
+    }
+}
+
+void MainWindow::on_selectionChanged()
+{
+    QTextCursor cursor = static_cast<TextEdit *>(ui->tabWidget->currentWidget())->textCursor();
+
+    ui->actionAdd_selected_to_dict->setDisabled(cursor.selectionStart() == cursor.selectionEnd());
+}
+
+void MainWindow::on_actionAdd_selected_to_dict_triggered()
+{
+    QString text = static_cast<TextEdit *>(ui->tabWidget->currentWidget())->textCursor().selectedText();
+    if (!text.isEmpty()) Trie::obj().addWord(text);
+}
+
+void MainWindow::on_actionLoad_dict_from_file_triggered()
+{
+
+}
+
+void MainWindow::on_actionShow_current_dict_triggered()
+{
+    if (Trie::obj().isEmpty())
+    {
+        QMessageBox::warning(this, "Open dictionary", "Dictionary is empty!");
+    }
+    else
+    {
+        QStringList dict = Trie::obj().words(QString());
+        on_actionNew_file_triggered();
+        TextEdit *te = static_cast<TextEdit *>(ui->tabWidget->currentWidget());
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), "Dictionary");
+        foreach (const QString &word, dict)
+        {
+            te->append(QString("<span>%1</span>").arg(word));
+        }
     }
 }

@@ -83,7 +83,9 @@
      <string>Text compliting</string>
     </property>
     <addaction name="actionLoad_dict_from_file"/>
-    <addaction name="actionShow_loaded_dict"/>
+    <addaction name="actionShow_current_dict"/>
+    <addaction name="separator"/>
+    <addaction name="actionAdd_selected_to_dict"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -217,9 +219,17 @@
     <string>Load dict from file</string>
    </property>
   </action>
-  <action name="actionShow_loaded_dict">
+  <action name="actionShow_current_dict">
    <property name="text">
-    <string>Show loaded dict</string>
+    <string>Show current dict</string>
+   </property>
+  </action>
+  <action name="actionAdd_selected_to_dict">
+   <property name="text">
+    <string>Add selected to dict</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+D</string>
    </property>
   </action>
  </widget>

@@ -43,7 +43,8 @@ public:
     QAction *actionNew_file;
     QAction *actionClose_if_no_tabs;
     QAction *actionLoad_dict_from_file;
-    QAction *actionShow_loaded_dict;
+    QAction *actionShow_current_dict;
+    QAction *actionAdd_selected_to_dict;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
@@ -93,8 +94,10 @@ public:
         actionClose_if_no_tabs->setCheckable(true);
         actionLoad_dict_from_file = new QAction(MainWindow);
         actionLoad_dict_from_file->setObjectName(QStringLiteral("actionLoad_dict_from_file"));
-        actionShow_loaded_dict = new QAction(MainWindow);
-        actionShow_loaded_dict->setObjectName(QStringLiteral("actionShow_loaded_dict"));
+        actionShow_current_dict = new QAction(MainWindow);
+        actionShow_current_dict->setObjectName(QStringLiteral("actionShow_current_dict"));
+        actionAdd_selected_to_dict = new QAction(MainWindow);
+        actionAdd_selected_to_dict->setObjectName(QStringLiteral("actionAdd_selected_to_dict"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -149,7 +152,9 @@ public:
         menuEdit->addAction(actionSelect_all);
         menuOptions->addAction(actionClose_if_no_tabs);
         menuText_compliting->addAction(actionLoad_dict_from_file);
-        menuText_compliting->addAction(actionShow_loaded_dict);
+        menuText_compliting->addAction(actionShow_current_dict);
+        menuText_compliting->addSeparator();
+        menuText_compliting->addAction(actionAdd_selected_to_dict);
 
         retranslateUi(MainWindow);
 
@@ -218,7 +223,11 @@ public:
 #endif // QT_NO_SHORTCUT
         actionClose_if_no_tabs->setText(QApplication::translate("MainWindow", "Close if no tabs", nullptr));
         actionLoad_dict_from_file->setText(QApplication::translate("MainWindow", "Load dict from file", nullptr));
-        actionShow_loaded_dict->setText(QApplication::translate("MainWindow", "Show loaded dict", nullptr));
+        actionShow_current_dict->setText(QApplication::translate("MainWindow", "Show current dict", nullptr));
+        actionAdd_selected_to_dict->setText(QApplication::translate("MainWindow", "Add selected to dict", nullptr));
+#ifndef QT_NO_SHORTCUT
+        actionAdd_selected_to_dict->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+D", nullptr));
+#endif // QT_NO_SHORTCUT
         menuFile->setTitle(QApplication::translate("MainWindow", "File", nullptr));
         menuEdit->setTitle(QApplication::translate("MainWindow", "Edit", nullptr));
         menuOptions->setTitle(QApplication::translate("MainWindow", "Options", nullptr));

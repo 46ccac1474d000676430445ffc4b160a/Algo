@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[20];
-    char stringdata0[453];
+    QByteArrayData data[25];
+    char stringdata0[610];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -50,7 +50,12 @@ QT_MOC_LITERAL(15, 313, 24), // "on_actionClose_triggered"
 QT_MOC_LITERAL(16, 338, 28), // "on_actionClose_all_triggered"
 QT_MOC_LITERAL(17, 367, 26), // "on_actionSave_as_triggered"
 QT_MOC_LITERAL(18, 394, 27), // "on_actionNew_file_triggered"
-QT_MOC_LITERAL(19, 422, 30) // "on_tabWidget_tabCloseRequested"
+QT_MOC_LITERAL(19, 422, 30), // "on_tabWidget_tabCloseRequested"
+QT_MOC_LITERAL(20, 453, 20), // "on_currentTabChanged"
+QT_MOC_LITERAL(21, 474, 19), // "on_selectionChanged"
+QT_MOC_LITERAL(22, 494, 39), // "on_actionAdd_selected_to_dict..."
+QT_MOC_LITERAL(23, 534, 38), // "on_actionLoad_dict_from_file_..."
+QT_MOC_LITERAL(24, 573, 36) // "on_actionShow_current_dict_tr..."
 
     },
     "MainWindow\0on_actionExit_triggered\0\0"
@@ -66,7 +71,11 @@ QT_MOC_LITERAL(19, 422, 30) // "on_tabWidget_tabCloseRequested"
     "on_actionClose_all_triggered\0"
     "on_actionSave_as_triggered\0"
     "on_actionNew_file_triggered\0"
-    "on_tabWidget_tabCloseRequested"
+    "on_tabWidget_tabCloseRequested\0"
+    "on_currentTabChanged\0on_selectionChanged\0"
+    "on_actionAdd_selected_to_dict_triggered\0"
+    "on_actionLoad_dict_from_file_triggered\0"
+    "on_actionShow_current_dict_triggered"
 };
 #undef QT_MOC_LITERAL
 
@@ -76,7 +85,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      17,   14, // methods
+      22,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -84,23 +93,28 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   99,    2, 0x08 /* Private */,
-       3,    0,  100,    2, 0x08 /* Private */,
-       4,    0,  101,    2, 0x08 /* Private */,
-       5,    0,  102,    2, 0x08 /* Private */,
-       6,    0,  103,    2, 0x08 /* Private */,
-       7,    0,  104,    2, 0x08 /* Private */,
-       8,    0,  105,    2, 0x08 /* Private */,
-       9,    0,  106,    2, 0x08 /* Private */,
-      10,    0,  107,    2, 0x08 /* Private */,
-      11,    0,  108,    2, 0x08 /* Private */,
-      12,    1,  109,    2, 0x08 /* Private */,
-      14,    0,  112,    2, 0x08 /* Private */,
-      15,    0,  113,    2, 0x08 /* Private */,
-      16,    0,  114,    2, 0x08 /* Private */,
-      17,    0,  115,    2, 0x08 /* Private */,
-      18,    0,  116,    2, 0x08 /* Private */,
-      19,    1,  117,    2, 0x08 /* Private */,
+       1,    0,  124,    2, 0x08 /* Private */,
+       3,    0,  125,    2, 0x08 /* Private */,
+       4,    0,  126,    2, 0x08 /* Private */,
+       5,    0,  127,    2, 0x08 /* Private */,
+       6,    0,  128,    2, 0x08 /* Private */,
+       7,    0,  129,    2, 0x08 /* Private */,
+       8,    0,  130,    2, 0x08 /* Private */,
+       9,    0,  131,    2, 0x08 /* Private */,
+      10,    0,  132,    2, 0x08 /* Private */,
+      11,    0,  133,    2, 0x08 /* Private */,
+      12,    1,  134,    2, 0x08 /* Private */,
+      14,    0,  137,    2, 0x08 /* Private */,
+      15,    0,  138,    2, 0x08 /* Private */,
+      16,    0,  139,    2, 0x08 /* Private */,
+      17,    0,  140,    2, 0x08 /* Private */,
+      18,    0,  141,    2, 0x08 /* Private */,
+      19,    1,  142,    2, 0x08 /* Private */,
+      20,    1,  145,    2, 0x08 /* Private */,
+      21,    0,  148,    2, 0x08 /* Private */,
+      22,    0,  149,    2, 0x08 /* Private */,
+      23,    0,  150,    2, 0x08 /* Private */,
+      24,    0,  151,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -120,6 +134,11 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,   13,
+    QMetaType::Void, QMetaType::Int,   13,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -147,6 +166,11 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 14: _t->on_actionSave_as_triggered(); break;
         case 15: _t->on_actionNew_file_triggered(); break;
         case 16: _t->on_tabWidget_tabCloseRequested((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 17: _t->on_currentTabChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 18: _t->on_selectionChanged(); break;
+        case 19: _t->on_actionAdd_selected_to_dict_triggered(); break;
+        case 20: _t->on_actionLoad_dict_from_file_triggered(); break;
+        case 21: _t->on_actionShow_current_dict_triggered(); break;
         default: ;
         }
     }
@@ -177,13 +201,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 17)
+        if (_id < 22)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 17;
+        _id -= 22;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 17)
+        if (_id < 22)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 17;
+        _id -= 22;
     }
     return _id;
 }

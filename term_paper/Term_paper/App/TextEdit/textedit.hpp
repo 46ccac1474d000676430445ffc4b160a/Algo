@@ -34,7 +34,7 @@ class TextEdit : public QTextEdit
     QString m_fileName;
 
 protected:
-    void contextMenuEvent(QContextMenuEvent *e);
+    void contextMenuEvent(QContextMenuEvent *e) override;
 
 private slots:
     void on_callSuggestions(int n = 3);

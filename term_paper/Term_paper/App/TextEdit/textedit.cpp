@@ -31,8 +31,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *e)
                     [this](){
                         QString text = textCursor().selectedText();
                         if (!text.isEmpty()) Trie::obj().addWord(text);
-                    },
-                    QKeySequence("Ctrl+D"));
+                    })->setDisabled(textCursor().selectionStart() == textCursor().selectionEnd());
     menu->exec(e->globalPos());
     delete menu;
 }
