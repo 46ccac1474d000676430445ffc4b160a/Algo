@@ -76,12 +76,11 @@ bool TextEdit::open(const QString &file)
     return false;
 }
 
-bool TextEdit::save()
+bool TextEdit::save(const QString &filename)
 {
-    if (saved()) return true;
-    if (fileName().isEmpty()) return false;
+    if (filename.isEmpty()) return false;
 
-    QFile f(fileName());
+    QFile f(filename);
     if (f.open(QIODevice::WriteOnly))
     {
         f.write(toPlainText().toUtf8());
@@ -118,6 +117,5 @@ TextEdit::TextEdit(QWidget *parent) :
     });
     connect(hideSuggestionsShortcut, &QShortcut::activated,
             suggestions, &SuggestionsList::hideSuggestions);
-
 }
 

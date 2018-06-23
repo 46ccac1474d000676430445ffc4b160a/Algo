@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TextEdit_t {
-    QByteArrayData data[11];
-    char stringdata0[104];
+    QByteArrayData data[12];
+    char stringdata0[113];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -41,12 +41,13 @@ QT_MOC_LITERAL(6, 56, 20), // "on_textCursorChanged"
 QT_MOC_LITERAL(7, 77, 4), // "open"
 QT_MOC_LITERAL(8, 82, 4), // "file"
 QT_MOC_LITERAL(9, 87, 4), // "save"
-QT_MOC_LITERAL(10, 92, 11) // "setFileName"
+QT_MOC_LITERAL(10, 92, 8), // "filename"
+QT_MOC_LITERAL(11, 101, 11) // "setFileName"
 
     },
     "TextEdit\0fileNameChanged\0\0fileName\0"
     "on_callSuggestions\0n\0on_textCursorChanged\0"
-    "open\0file\0save\0setFileName"
+    "open\0file\0save\0filename\0setFileName"
 };
 #undef QT_MOC_LITERAL
 
@@ -57,7 +58,7 @@ static const uint qt_meta_data_TextEdit[] = {
        0,       // classname
        0,    0, // classinfo
        7,   14, // methods
-       1,   64, // properties
+       1,   66, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
@@ -71,8 +72,8 @@ static const uint qt_meta_data_TextEdit[] = {
        4,    0,   55,    2, 0x28 /* Private | MethodCloned */,
        6,    0,   56,    2, 0x08 /* Private */,
        7,    1,   57,    2, 0x0a /* Public */,
-       9,    0,   60,    2, 0x0a /* Public */,
-      10,    1,   61,    2, 0x0a /* Public */,
+       9,    1,   60,    2, 0x0a /* Public */,
+      11,    1,   63,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -82,7 +83,7 @@ static const uint qt_meta_data_TextEdit[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Bool, QMetaType::QString,    8,
-    QMetaType::Bool,
+    QMetaType::Bool, QMetaType::QString,   10,
     QMetaType::Void, QMetaType::QString,    3,
 
  // properties: name, type, flags
@@ -106,7 +107,7 @@ void TextEdit::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 3: _t->on_textCursorChanged(); break;
         case 4: { bool _r = _t->open((*reinterpret_cast< const QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 5: { bool _r = _t->save();
+        case 5: { bool _r = _t->save((*reinterpret_cast< const QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
         case 6: _t->setFileName((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         default: ;

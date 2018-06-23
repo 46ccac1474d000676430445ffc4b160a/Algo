@@ -80,6 +80,7 @@ public:
 
     void addWord(const QString &word);
     Trie &operator <<(const QString &word);
+    Trie &operator <<(const QStringList &dict);
     void remove(const QString &word);
     void clear();
 

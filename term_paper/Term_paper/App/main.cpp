@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 {
     QApplication::setStyle(QStyleFactory::create("Fusion"));
     QApplication a(argc, argv);
-
+/* *
     QPalette darkPalette;
     darkPalette.setColor(QPalette::Window,QColor(0, 0, 0));
     darkPalette.setColor(QPalette::WindowText,Qt::white);
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     darkPalette.setColor(QPalette::HighlightedText,Qt::white);
     darkPalette.setColor(QPalette::Disabled,QPalette::HighlightedText,QColor(127,127,127));
     a.setPalette(darkPalette);
-
+/* */
 
     MainWindow w;
     w.show();

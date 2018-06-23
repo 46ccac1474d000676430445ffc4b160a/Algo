@@ -48,7 +48,7 @@ private slots:
 
     void on_actionSave_triggered();
 
-    void on_actionSave(int index);
+    void on_actionSave(int index, bool newflname = false);
 
     void on_actionSave_all_triggered();
 
@@ -64,13 +64,20 @@ private slots:
 
     void on_currentTabChanged(int index);
 
-    void on_selectionChanged();
+    void on_curentDocumentChanged();
 
     void on_actionAdd_selected_to_dict_triggered();
 
     void on_actionLoad_dict_from_file_triggered();
 
     void on_actionShow_current_dict_triggered();
+
+    void on_undoEnable(bool enable);
+    void on_redoEnable(bool enable);
+
+    void on_actionClear_current_dict_triggered();
+
+    void on_curentDocumentTextChanged();
 
 private:
     Ui::MainWindow *ui;

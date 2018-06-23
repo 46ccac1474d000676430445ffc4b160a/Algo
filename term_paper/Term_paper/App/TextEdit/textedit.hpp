@@ -42,7 +42,7 @@ private slots:
 
 public slots:
     bool open(const QString &file);
-    bool save();
+    bool save(const QString &filename);
     void setFileName(const QString &fileName);
 
 public:

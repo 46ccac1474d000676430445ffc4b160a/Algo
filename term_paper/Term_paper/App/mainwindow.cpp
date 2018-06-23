@@ -20,10 +20,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::on_currentTabChanged);
+    connect(ui->actionAdd_selected_to_dict, &QAction::triggered, this, &MainWindow::on_curentDocumentChanged);
 
     ui->actionClose_if_no_tabs->setChecked(true);
     ui->actionAdd_selected_to_dict->setDisabled(true);
-    ui->tabWidget->addTab(new TextEdit(), "Untilted");
+    ui->actionCopy->setDisabled(true);
+    ui->actionCut->setDisabled(true);
+    ui->actionUndo->setDisabled(true);
+    ui->actionRedo->setDisabled(true);
+    ui->actionPaste->setDisabled(true);
+    ui->actionDelete->setDisabled(true);
+    ui->actionSelect_all->setDisabled(true);
+    ui->actionSave->setDisabled(true);
+    ui->actionShow_current_dict->setDisabled(Trie::obj().isEmpty());
+    ui->actionClear_current_dict->setDisabled(Trie::obj().isEmpty());
+
+    on_actionNew_file_triggered();
+    on_curentDocumentChanged();
 }
 
 MainWindow::~MainWindow()
@@ -110,22 +123,24 @@ void MainWindow::on_actionSave_triggered()
     on_actionSave(ui->tabWidget->currentIndex());
 }
 
-void MainWindow::on_actionSave(int index)
+void MainWindow::on_actionSave(int index, bool newflname)
 {
-    QString file = QFileDialog::getOpenFileName(this, "Open file", QDir::homePath());
-    if (file.isEmpty()) return;
-
-    TextEdit *textEdit = static_cast<TextEdit *>(ui->tabWidget->widget(index));
-
-    if (textEdit->fileName().isEmpty())
+    if (ui->tabWidget->count() > 0)
     {
-        textEdit->setFileName(file);
-        if (textEdit->fileName().isEmpty()) return;
-    }
+        TextEdit *textEdit = static_cast<TextEdit *>(ui->tabWidget->widget(index));
 
-    if (!textEdit->save())
-    {
-        QMessageBox::warning(this, "Open file", QString("Failed to save file: \"%1\"").arg(textEdit->fileName()));
+        if (textEdit->fileName().isEmpty() || newflname)
+        {
+            QString file = QFileDialog::getSaveFileName(this, "Open file", QDir::homePath());
+            if (file.isEmpty()) return;
+
+            textEdit->setFileName(file);
+        }
+
+        if (!textEdit->save(textEdit->fileName()))
+        {
+            QMessageBox::warning(this, "Open file", QString("Failed to save file: \"%1\"").arg(textEdit->fileName()));
+        }
     }
 }
 
@@ -151,19 +166,25 @@ void MainWindow::on_actionClose_all_triggered()
     int n = ui->tabWidget->count();
     while(n--)
     {
+        ui->tabWidget->setCurrentWidget(0);
         on_tabWidget_tabCloseRequested(0);
     }
 }
 
 void MainWindow::on_actionSave_as_triggered()
 {
-    on_actionSave(ui->tabWidget->currentIndex());
+    on_actionSave(ui->tabWidget->currentIndex(), true);
 }
 
 void MainWindow::on_actionNew_file_triggered()
 {
     int index = ui->tabWidget->addTab(new TextEdit(), "Untilted");
     ui->tabWidget->setCurrentIndex(index);
+
+    ui->actionSave_all->setEnabled(true);
+    ui->actionSave_as->setEnabled(true);
+    ui->actionClose->setEnabled(true);
+    ui->actionClose_all->setEnabled(true);
 }
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
@@ -174,7 +195,15 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 
         if (!textEdit->saved())
         {
-            int ans = QMessageBox::question(this, "File save", QString("Save changes to file before closing?"),
+            int ans = QMessageBox::question(this,
+                                            "File save",
+                                            QString("Save changes to file \"%1\" before closing?")
+                                            .arg(
+                                                textEdit->fileName().isEmpty()
+                                                ?
+                                                    ui->tabWidget->tabText(index)
+                                                  :
+                                                    textEdit->fileName()),
                                             QMessageBox::No,
                                             QMessageBox::Cancel,
                                             QMessageBox::Yes);
@@ -186,7 +215,26 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
         ui->tabWidget->removeTab(index);
         textEdit->deleteLater();
 
-        if (ui->tabWidget->count() == 0 && ui->actionClose_if_no_tabs->isChecked()) close();
+        if (ui->tabWidget->count() == 0)
+        {
+            if (ui->actionClose_if_no_tabs->isChecked()) close();
+            else
+            {
+                ui->actionAdd_selected_to_dict->setDisabled(true);
+                ui->actionCopy->setDisabled(true);
+                ui->actionCut->setDisabled(true);
+                ui->actionUndo->setDisabled(true);
+                ui->actionRedo->setDisabled(true);
+                ui->actionPaste->setDisabled(true);
+                ui->actionDelete->setDisabled(true);
+                ui->actionSelect_all->setDisabled(true);
+                ui->actionSave->setDisabled(true);
+                ui->actionSave_all->setDisabled(true);
+                ui->actionSave_as->setDisabled(true);
+                ui->actionClose->setDisabled(true);
+                ui->actionClose_all->setDisabled(true);
+            }
+        }
     }
 }
 
@@ -198,30 +246,76 @@ void MainWindow::on_currentTabChanged(int index)
         for (int i = 0; i < ui->tabWidget->count(); i++)
         {
             te = static_cast<TextEdit *>(ui->tabWidget->widget(i));
-            disconnect(te, &TextEdit::selectionChanged, this, &MainWindow::on_selectionChanged);
+            disconnect(te, &TextEdit::selectionChanged,
+                       this, &MainWindow::on_curentDocumentChanged);
+            disconnect(te, &TextEdit::undoAvailable,
+                       this, &MainWindow::on_undoEnable);
+            disconnect(te, &TextEdit::redoAvailable,
+                       this, &MainWindow::on_redoEnable);
+            disconnect(te, &TextEdit::textChanged,
+                       this, &MainWindow::on_curentDocumentTextChanged);
         }
 
         te = static_cast<TextEdit *>(ui->tabWidget->widget(index));
-        connect(te, &TextEdit::selectionChanged, this, &MainWindow::on_selectionChanged);
+        connect(te, &TextEdit::selectionChanged,
+                this, &MainWindow::on_curentDocumentChanged);
+        connect(te, &TextEdit::undoAvailable,
+                this, &MainWindow::on_undoEnable);
+        connect(te, &TextEdit::redoAvailable,
+                this, &MainWindow::on_redoEnable);
+        connect(te, &TextEdit::textChanged,
+                this, &MainWindow::on_curentDocumentTextChanged);
     }
 }
 
-void MainWindow::on_selectionChanged()
+void MainWindow::on_curentDocumentChanged()
 {
-    QTextCursor cursor = static_cast<TextEdit *>(ui->tabWidget->currentWidget())->textCursor();
+    TextEdit *te = static_cast<TextEdit *>(ui->tabWidget->currentWidget());
+    QTextCursor cursor = te->textCursor();
 
-    ui->actionAdd_selected_to_dict->setDisabled(cursor.selectionStart() == cursor.selectionEnd());
+    bool selected = cursor.selectionStart() != cursor.selectionEnd();
+    ui->actionAdd_selected_to_dict->setEnabled(selected);
+    ui->actionCopy->setEnabled(selected);
+    ui->actionCut->setEnabled(selected);
+    ui->actionPaste->setEnabled(te->canPaste());
+    ui->actionSave->setDisabled(te->saved());
+    ui->actionShow_current_dict->setDisabled(Trie::obj().isEmpty());
 }
 
 void MainWindow::on_actionAdd_selected_to_dict_triggered()
 {
     QString text = static_cast<TextEdit *>(ui->tabWidget->currentWidget())->textCursor().selectedText();
     if (!text.isEmpty()) Trie::obj().addWord(text);
+    if (!Trie::obj().isEmpty())
+    {
+        ui->actionShow_current_dict->setEnabled(true);
+        ui->actionClear_current_dict->setEnabled(true);
+    }
 }
 
 void MainWindow::on_actionLoad_dict_from_file_triggered()
 {
+    QString filename = QFileDialog::getOpenFileName(this, "Open dictionary", QDir::currentPath());
+    if (!filename.isEmpty())
+    {
+        QFile f(filename);
+        if (f.open(QIODevice::ReadOnly))
+        {
+            QString dict(f.readAll());
+            dict.remove('\r');
+            Trie::obj() << dict.split('\n', QString::SkipEmptyParts);
 
+            if (!Trie::obj().isEmpty())
+            {
+                ui->actionShow_current_dict->setEnabled(true);
+                ui->actionClear_current_dict->setEnabled(true);
+            }
+        }
+        else
+        {
+            QMessageBox::warning(this, "Open dictionary", QString("Dictionary, named \"%1\" not loaded!").arg(filename));
+        }
+    }
 }
 
 void MainWindow::on_actionShow_current_dict_triggered()
@@ -241,4 +335,32 @@ void MainWindow::on_actionShow_current_dict_triggered()
             te->append(QString("<span>%1</span>").arg(word));
         }
     }
+}
+
+void MainWindow::on_undoEnable(bool enable)
+{
+    ui->actionUndo->setEnabled(enable);
+}
+
+void MainWindow::on_redoEnable(bool enable)
+{
+    ui->actionRedo->setEnabled(enable);
+}
+
+void MainWindow::on_actionClear_current_dict_triggered()
+{
+    if (!Trie::obj().isEmpty()
+            &&
+        QMessageBox::question(this, "Clear curent dictionary", "Are you sure want to clear curent dictionary?", QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)
+    {
+        Trie::obj().clear();
+        ui->actionShow_current_dict->setDisabled(true);
+        ui->actionClear_current_dict->setDisabled(true);
+    }
+}
+
+void MainWindow::on_curentDocumentTextChanged()
+{
+    ui->actionSave->setEnabled(true);
+    ui->actionSelect_all->setDisabled(static_cast<TextEdit *>(ui->tabWidget->currentWidget())->toPlainText().isEmpty());
 }

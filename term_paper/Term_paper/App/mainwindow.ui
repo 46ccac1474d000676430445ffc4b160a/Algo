@@ -84,6 +84,7 @@
     </property>
     <addaction name="actionLoad_dict_from_file"/>
     <addaction name="actionShow_current_dict"/>
+    <addaction name="actionClear_current_dict"/>
     <addaction name="separator"/>
     <addaction name="actionAdd_selected_to_dict"/>
    </widget>
@@ -216,20 +217,25 @@
   </action>
   <action name="actionLoad_dict_from_file">
    <property name="text">
-    <string>Load dict from file</string>
+    <string>Load dictionary from file</string>
    </property>
   </action>
   <action name="actionShow_current_dict">
    <property name="text">
-    <string>Show current dict</string>
+    <string>Show current dictionary</string>
    </property>
   </action>
   <action name="actionAdd_selected_to_dict">
    <property name="text">
-    <string>Add selected to dict</string>
+    <string>Add selected to dictionary</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+D</string>
+   </property>
+  </action>
+  <action name="actionClear_current_dict">
+   <property name="text">
+    <string>Clear current dictionary</string>
    </property>
   </action>
  </widget>

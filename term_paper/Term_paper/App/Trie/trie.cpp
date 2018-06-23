@@ -158,6 +158,15 @@ Trie &Trie::operator <<(const QString &word)
     return *this;
 }
 
+Trie &Trie::operator <<(const QStringList &dict)
+{
+    foreach (const QString &word, dict)
+    {
+        addWord(word);
+    }
+    return *this;
+}
+
 void Trie::remove(const QString &word)
 {
     Node_p *node = root;
