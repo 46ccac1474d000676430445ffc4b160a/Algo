@@ -2,11 +2,14 @@
 #include <QApplication>
 #include <QStyleFactory>
 
+//#define DARK_THEME
+
 int main(int argc, char *argv[])
 {
     QApplication::setStyle(QStyleFactory::create("Fusion"));
     QApplication a(argc, argv);
-/* *
+
+#ifdef DARK_THEME
     QPalette darkPalette;
     darkPalette.setColor(QPalette::Window,QColor(0, 0, 0));
     darkPalette.setColor(QPalette::WindowText,Qt::white);
@@ -29,9 +32,10 @@ int main(int argc, char *argv[])
     darkPalette.setColor(QPalette::HighlightedText,Qt::white);
     darkPalette.setColor(QPalette::Disabled,QPalette::HighlightedText,QColor(127,127,127));
     a.setPalette(darkPalette);
-/* */
+#endif
 
     MainWindow w;
+    w.setWindowIcon(QIcon(":/icon.ico"));
     w.show();
 
     return a.exec();

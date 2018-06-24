@@ -9,6 +9,9 @@ TEMPLATE = app
 DEFINES += QT_DEPRECATED_WARNINGS
 
 DESTDIR = ../../Build
+win32:DESTDIR = ../../Build-Win
+
+win32:RC_ICONS = icon.ico
 
 HEADERS = \
    $$PWD/Trie/trie.hpp \
@@ -31,4 +34,10 @@ FORMS = \
 INCLUDEPATH =
 
 #DEFINES = 
+
+DISTFILES += \
+    dict.txt
+
+RESOURCES += \
+    rec.qrc
 

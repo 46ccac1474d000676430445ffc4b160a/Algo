@@ -37,6 +37,22 @@ MainWindow::MainWindow(QWidget *parent) :
 
     on_actionNew_file_triggered();
     on_curentDocumentChanged();
+
+
+    QFile f(":/dict.txt");
+    if (f.open(QIODevice::ReadOnly))
+    {
+        QString dict(f.readAll());
+        dict.remove('\r');
+        Trie::obj() << dict.split('\n', QString::SkipEmptyParts);
+
+        if (!Trie::obj().isEmpty())
+        {
+            ui->actionShow_current_dict->setEnabled(true);
+            ui->actionClear_current_dict->setEnabled(true);
+        }
+        f.close();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -310,6 +326,8 @@ void MainWindow::on_actionLoad_dict_from_file_triggered()
                 ui->actionShow_current_dict->setEnabled(true);
                 ui->actionClear_current_dict->setEnabled(true);
             }
+
+            f.close();
         }
         else
         {
