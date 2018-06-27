@@ -8,6 +8,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
         on_actionClose_all_triggered();
 
+        if (!isDictSaved &&
+            QMessageBox::question(this, "Save dictionary", "Dictionary changed. Want to save it?") == QMessageBox::Yes)
+        {
+            on_actionSave_current_dict_triggered();
+        }
+
         QMainWindow::closeEvent(event);
     }
     else event->ignore();
@@ -15,6 +21,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
+    isDictSaved(true),
+    lastDictPath(QDir::currentPath()),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -151,6 +159,9 @@ void MainWindow::on_actionSave(int index, bool newflname)
             if (file.isEmpty()) return;
 
             textEdit->setFileName(file);
+
+            QStringList t = file.split('/', QString::SkipEmptyParts);
+            if (!t.isEmpty()) ui->tabWidget->setTabText(index, t[t.size()-1]);
         }
 
         if (!textEdit->save(textEdit->fileName()))
@@ -293,6 +304,7 @@ void MainWindow::on_curentDocumentChanged()
     ui->actionAdd_selected_to_dict->setEnabled(selected);
     ui->actionCopy->setEnabled(selected);
     ui->actionCut->setEnabled(selected);
+    ui->actionDelete->setEnabled(selected);
     ui->actionPaste->setEnabled(te->canPaste());
     ui->actionSave->setDisabled(te->saved());
     ui->actionShow_current_dict->setDisabled(Trie::obj().isEmpty());
@@ -301,7 +313,11 @@ void MainWindow::on_curentDocumentChanged()
 void MainWindow::on_actionAdd_selected_to_dict_triggered()
 {
     QString text = static_cast<TextEdit *>(ui->tabWidget->currentWidget())->textCursor().selectedText();
-    if (!text.isEmpty()) Trie::obj().addWord(text);
+    if (!text.isEmpty())
+    {
+        Trie::obj().addWord(text);
+        isDictSaved = false;
+    }
     if (!Trie::obj().isEmpty())
     {
         ui->actionShow_current_dict->setEnabled(true);
@@ -311,7 +327,13 @@ void MainWindow::on_actionAdd_selected_to_dict_triggered()
 
 void MainWindow::on_actionLoad_dict_from_file_triggered()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "Open dictionary", QDir::currentPath());
+    if (!isDictSaved &&
+        QMessageBox::question(this, "Save dictionary", "Dictionary changed. Want to save it?") == QMessageBox::Yes)
+    {
+        on_actionSave_current_dict_triggered();
+    }
+
+    QString filename = QFileDialog::getOpenFileName(this, "Open dictionary", lastDictPath);
     if (!filename.isEmpty())
     {
         QFile f(filename);
@@ -325,7 +347,11 @@ void MainWindow::on_actionLoad_dict_from_file_triggered()
             {
                 ui->actionShow_current_dict->setEnabled(true);
                 ui->actionClear_current_dict->setEnabled(true);
+                ui->actionSave_current_dict->setEnabled(true);
             }
+
+            lastDictPath = filename;
+            isDictSaved = true;
 
             f.close();
         }
@@ -373,7 +399,9 @@ void MainWindow::on_actionClear_current_dict_triggered()
     {
         Trie::obj().clear();
         ui->actionShow_current_dict->setDisabled(true);
+        ui->actionSave_current_dict->setDisabled(true);
         ui->actionClear_current_dict->setDisabled(true);
+        isDictSaved = false;
     }
 }
 
@@ -381,4 +409,28 @@ void MainWindow::on_curentDocumentTextChanged()
 {
     ui->actionSave->setEnabled(true);
     ui->actionSelect_all->setDisabled(static_cast<TextEdit *>(ui->tabWidget->currentWidget())->toPlainText().isEmpty());
+}
+
+void MainWindow::on_actionSave_current_dict_triggered()
+{
+    QString dictPath = QFileDialog::getSaveFileName(this, "Save dictionary", lastDictPath);
+    if (!dictPath.isEmpty())
+    {
+        QFile f(dictPath);
+        if (f.open(QIODevice::WriteOnly))
+        {
+            QStringList dict = Trie::obj().words(QString());
+            foreach (const QString &word, dict)
+            {
+                f.write(QString("%1\n").arg(word).toUtf8());
+            }
+            f.close();
+            lastDictPath = dictPath;
+            isDictSaved = true;
+        }
+        else
+        {
+            QMessageBox::warning(this, "Save dictionary", QString("Failed to save dictionary to file \"%1\"").arg(dictPath));
+        }
+    }
 }

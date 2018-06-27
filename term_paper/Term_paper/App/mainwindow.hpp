@@ -20,6 +20,9 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+    bool isDictSaved;
+    QString lastDictPath;
+
 protected:
     void closeEvent(QCloseEvent *event) override;
 
@@ -78,6 +81,8 @@ private slots:
     void on_actionClear_current_dict_triggered();
 
     void on_curentDocumentTextChanged();
+
+    void on_actionSave_current_dict_triggered();
 
 private:
     Ui::MainWindow *ui;

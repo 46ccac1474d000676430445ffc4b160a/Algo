@@ -8,7 +8,6 @@ TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
-DESTDIR = ../../Build
 win32:DESTDIR = ../../Build-Win
 
 win32:RC_ICONS = icon.ico
@@ -29,14 +28,7 @@ SOURCES = \
     TextEdit/textedit_p.cpp
 
 FORMS = \
-    $$PWD/mainwindow.ui
-
-INCLUDEPATH =
-
-#DEFINES = 
-
-DISTFILES += \
-    dict.txt
+    mainwindow.ui
 
 RESOURCES += \
     rec.qrc
