@@ -4,6 +4,7 @@
 #include <QChar>
 #include <QVector>
 #include <QLinkedList>
+#include <QHash>
 
 #include <stdexcept>
 
@@ -19,18 +20,17 @@ class Node_p
 #endif
 
 //STATIC
-    static int p_indexHelper(const QChar &c);
-    static QChar p_letterHelper(int p_indexHelper);
+    static QChar checkChar(const QChar &c);
 
 //FIELDS
     Node_p *m_parent;
 
-    Node_p *d[CAP] = {0x0};
+    QHash<QChar, Node_p *> d;
 
     bool isEnd;
 
 //METHODS
-    Node_p(Node_p *parent = 0x0);
+    Node_p(Node_p *parent = nullptr);
 
     Node_p *parent() const;
     Node_p *at(const QChar &c) const;

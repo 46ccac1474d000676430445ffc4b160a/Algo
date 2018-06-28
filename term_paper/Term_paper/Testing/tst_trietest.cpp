@@ -11,8 +11,6 @@ public:
     TrieTest();
 
 private Q_SLOTS:
-    void test_index();
-    void test_letter();
     void test_contains_addWord();
     void test_remove();
     void test_words();
@@ -22,82 +20,51 @@ TrieTest::TrieTest()
 {
 }
 
-void TrieTest::test_index()
-{
-    for (int i = 'a'; i <= 'z'; i++)
-    {
-        QCOMPARE(Node_p::p_indexHelper(QChar(i)), i-'a');
-    }
-
-    QString ru = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
-    for (int i = 0; i < ru.size(); i++)
-    {
-        QCOMPARE(Node_p::p_indexHelper(ru[i]), i+26);
-    }
-
-    for (int i = '0'; i <= '9'; i++)
-    {
-        QCOMPARE(Node_p::p_indexHelper(QChar(i)), i-'0'+59);
-    }
-}
-
-void TrieTest::test_letter()
-{
-    for (int i = 'a'; i <= 'z'; i++)
-    {
-        QCOMPARE(Node_p::p_letterHelper(i-'a'), QChar(i));
-    }
-
-    QString ru = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
-    for (int i = 0; i < ru.size(); i++)
-    {
-        QCOMPARE(Node_p::p_letterHelper(i+26), ru[i]);
-    }
-
-    for (int i = '0'; i <= '9'; i++)
-    {
-        QCOMPARE(Node_p::p_letterHelper(i-'0'+59), QChar(i));
-    }
-}
-
 void TrieTest::test_contains_addWord()
 {
-    QStringList words;
-
-    QFile f(QDir::currentPath()+"/dict.txt");
-    if (f.open(QIODevice::ReadOnly))
+    try
     {
-        QString buf(f.readAll());
-        buf.remove('\r');
+        QStringList words;
 
-        words = buf.split('\n');
+        QFile f(":/dict.txt");
+        if (f.open(QIODevice::ReadOnly))
+        {
+            QString buf(f.readAll());
+            buf.remove('\r');
 
-        f.close();
+            words = buf.split('\n');
+
+            f.close();
+        }
+        else
+        {
+            QWARN("dict.txt not open");
+            return;
+        }
+
+        Trie trie;
+
+        foreach (QString word, words)
+        {
+            QCOMPARE(trie.contains(word), false);
+        }
+
+        foreach (QString word, words)
+        {
+            if (trie.contains(word)) qWarning() << "trie already contains:" << word;
+            QCOMPARE(trie.contains(word), false);
+            trie.addWord(word);
+            QCOMPARE(trie.contains(word), true);
+        }
+
+        foreach (QString word, words)
+        {
+            QCOMPARE(trie.contains(word), true);
+        }
     }
-    else
+    catch(std::invalid_argument e)
     {
-        QWARN("dict.txt not open");
-        return;
-    }
-
-    Trie trie;
-
-    foreach (QString word, words)
-    {
-        QCOMPARE(trie.contains(word), false);
-    }
-
-    foreach (QString word, words)
-    {
-        if (trie.contains(word)) qWarning() << "trie already contains:" << word;
-        QCOMPARE(trie.contains(word), false);
-        trie.addWord(word);
-        QCOMPARE(trie.contains(word), true);
-    }
-
-    foreach (QString word, words)
-    {
-        QCOMPARE(trie.contains(word), true);
+        qWarning() << e.what();
     }
 }
 
@@ -122,17 +89,22 @@ void TrieTest::test_remove()
 
     Trie trie;
 
-    foreach (QString word, words)
+    foreach (const QString &word, words)
     {
         trie.addWord(word);
     }
 
+    QStringList __temp = trie.words(QString());
+
     int c = 0;
-    foreach (QString word, words)
+    foreach (const QString &word, words)
     {
         c++;
+        if (!trie.contains(word))
+            qWarning() << word;
         QCOMPARE(trie.contains(word), true);
         trie.remove(word);
+        if (trie.contains(word)) qWarning() << word;
         QCOMPARE(trie.contains(word), false);
     }
 }

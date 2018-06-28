@@ -34,3 +34,6 @@ SOURCES += \
 
 HEADERS += \
     ../App/Trie/trie.hpp
+
+RESOURCES += \
+    ../App/rec.qrc

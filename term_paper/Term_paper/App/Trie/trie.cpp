@@ -1,25 +1,17 @@
 #include "trie.hpp"
 
-int Node_p::p_indexHelper(const QChar &c)
+QChar Node_p::checkChar(const QChar &c)
 {
     QChar ch = c.toLower();
     int index = ( ch.row() << 8 ) | ch.cell();
 
-    if ('a' <= index && index <= 'z') return index - 'a';
-    else if (1072 <= index && index <= 1103) return (index - 1072) + 26; //ru а-я
-    else if (index == 1105) return 58;  //ru ё
-    else if('0' <= index && index <= '9') return (index - '0') + 59;
-    else if (index == '-') return 69;
-    else return -1;
-}
-
-QChar Node_p::p_letterHelper(int index)
-{
-    if (0 <= index && index <= 25) return QChar(index + 'a');
-    else if (26 <= index && index <= 57) return QChar(index - 26 + 1072);   //ru а-я
-    else if (index == 58) return QChar(1105);   //ru ё
-    else if (59 <= index && index <= 68) return QChar(index - 59 + '0');
-    else if (index == 69) return QChar('-');
+    if (
+            ('a' <= index && index <= 'z') ||
+            (1072 <= index && index <= 1103) ||
+            (index == 1105) ||
+            ('0' <= index && index <= '9') ||
+            (index == '-')
+       ) return ch;
     else return QChar();
 }
 
@@ -36,29 +28,33 @@ Node_p *Node_p::parent() const
 
 Node_p *Node_p::at(const QChar &c) const
 {
-    int index = p_indexHelper(c);
-    if (index < 0) throw std::range_error("in \"Node_p *Node_p::operator [](const QChar &c)\" range error");
+    QChar index = checkChar(c);
+    if (index.isNull()) throw std::invalid_argument("in \"Node_p *Node_p::at(const QChar &c) const\" invalid char");
 
-    return d[index];
+    if (d.contains(index)) return d.value(index);
+    else return nullptr;
 }
 
 bool Node_p::isEmpty() const
 {
-    for (int i = 0; i < CAP; i++)
-    {
-        if (d[i] != 0x0) return false;
-    }
-
-    return !isEnd;
+    return d.isEmpty() || !isEnd;
 }
 
 void Node_p::set(const QChar &c, Node_p *node)
 {
-    int index = p_indexHelper(c);
-    if (index < 0) throw std::range_error("in \"void Node_p::set(const QChar &c, Node_p *node)\" range error");
+    QChar index = checkChar(c);
+    if (index.isNull()) throw std::invalid_argument("in \"void Node_p::set(const QChar &c, Node_p *node)\" invalid char");
 
-    if (node == 0x0) delete d[index];
-    d[index] = node;
+    if (d.contains(index))
+    {
+        Node_p *l_node = d.value(index);
+        d.remove(index);
+        delete l_node;
+    }
+
+    if (node == nullptr) return;
+
+    d.insert(index, node);
 }
 
 void Node_p::setParent(Node_p *parent)
@@ -66,8 +62,11 @@ void Node_p::setParent(Node_p *parent)
 
 Node_p::~Node_p()
 {
-    for (int i = 0; i < CAP; i++)
-        delete d[i];
+    QList<Node_p *> children = d.values();
+    foreach (Node_p *node, children)
+    {
+        delete node;
+    }
 }
 
 
@@ -75,20 +74,17 @@ Node_p::~Node_p()
 
 void Trie::p_wordsHelper(Node_p *node, QString word, QStringList &list, int n)
 {
-    for (int i = 0; i < CAP; i++)
+    QList<QChar> keys = node->d.keys();
+    foreach (QChar index, keys)
     {
-        Node_p *t = node->d[i];
-        if (t)
+        Node_p *t = node->d.value(index);
+        if (t->isEnd)
         {
-            QChar c = Node_p::p_letterHelper(i);
-            if (t->isEnd)
-            {
-                list << word+c;
-                n--;
-            }
-            if (n) p_wordsHelper(t, word+c, list, n);
-            else return;
+            list << word+index;
+            n--;
         }
+        if (n) p_wordsHelper(t, word+index, list, n);
+        else return;
     }
 }
 
@@ -111,14 +107,12 @@ QStringList Trie::words(const QString &preffix, int n) const
 
     foreach (const QChar &c, preffix)
     {
-        if ( (node = node->at(c)) == 0x0) return QStringList();
+        if ( (node = node->at(c)) == nullptr) return QStringList();
     }
 
     QStringList s_list;
 
-    QString str = preffix;
-
-    p_wordsHelper(node, str, s_list, n);
+    p_wordsHelper(node, preffix, s_list, n);
 
     return s_list;
 }
@@ -127,9 +121,10 @@ bool Trie::contains(const QString &word) const
 {
     Node_p *node = root;
 
-    foreach (const QChar &c, word)
+    foreach (QChar c, word)
     {
-        if ( (node = node->at(c)) == 0x0) return false;
+        if (Node_p::checkChar(c).isNull()) c = '-';
+        if ((node = node->at(c)) == nullptr) return false;
     }
     return node->isEnd;
 }
@@ -140,9 +135,13 @@ void Trie::addWord(const QString &word)
 
     foreach (QChar c, word)
     {
-        if (Node_p::p_indexHelper(c) < 0) c = '-';
+        if (Node_p::checkChar(c).isNull())
+        {
+            qDebug() << c;
+            c = '-';
+        }
         Node_p *t = node->at(c);
-        if (t == 0x0)
+        if (t == nullptr)
         {
             t = new Node_p(node);
             node->set(c, t);
@@ -175,7 +174,7 @@ void Trie::remove(const QString &word)
 
     foreach (const QChar &c, word)
     {
-        if ( (node = node->at(c)) == 0x0) return;
+        if ( (node = node->at(c)) == nullptr) return;
         stack.prepend(c);
     }
 
@@ -183,9 +182,9 @@ void Trie::remove(const QString &word)
 
     foreach (const QChar &c, stack)
     {
-        if ( (node = node->parent()) == 0x0) return;
+        if ( (node = node->parent()) == nullptr) return;
         if (!node->isEmpty()) return;
-        node->set(c, 0x0);
+        node->set(c, nullptr);
     }
 }
 
