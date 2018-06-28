@@ -57,7 +57,7 @@ void Node_p::set(const QChar &c, Node_p *node)
     int index = p_indexHelper(c);
     if (index < 0) throw std::range_error("in \"void Node_p::set(const QChar &c, Node_p *node)\" range error");
 
-    if (node == 0x0) delete d[index];
+    delete d[index];
     d[index] = node;
 }
 

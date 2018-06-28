@@ -2,8 +2,6 @@
 #define TRIE_HPP
 
 #include <QChar>
-#include <QVector>
-#include <QLinkedList>
 
 #include <stdexcept>
 

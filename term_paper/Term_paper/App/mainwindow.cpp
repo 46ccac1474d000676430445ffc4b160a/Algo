@@ -9,6 +9,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         on_actionClose_all_triggered();
 
         if (!isDictSaved &&
+            !Trie::obj().isEmpty() &&
             QMessageBox::question(this, "Save dictionary", "Dictionary changed. Want to save it?") == QMessageBox::Yes)
         {
             on_actionSave_current_dict_triggered();
@@ -328,6 +329,7 @@ void MainWindow::on_actionAdd_selected_to_dict_triggered()
 void MainWindow::on_actionLoad_dict_from_file_triggered()
 {
     if (!isDictSaved &&
+        !Trie::obj().isEmpty() &&
         QMessageBox::question(this, "Save dictionary", "Dictionary changed. Want to save it?") == QMessageBox::Yes)
     {
         on_actionSave_current_dict_triggered();
