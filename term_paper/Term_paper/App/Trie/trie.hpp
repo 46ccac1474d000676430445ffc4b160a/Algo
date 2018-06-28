@@ -8,8 +8,6 @@
 
 #include <QDebug>
 
-static const int CAP = 70;
-
 class Node_p
 {
     friend class Trie;
