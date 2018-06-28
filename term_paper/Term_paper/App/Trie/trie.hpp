@@ -2,9 +2,7 @@
 #define TRIE_HPP
 
 #include <QChar>
-#include <QVector>
-#include <QLinkedList>
-#include <QHash>
+#include <QMap>
 
 #include <stdexcept>
 
@@ -25,7 +23,7 @@ class Node_p
 //FIELDS
     Node_p *m_parent;
 
-    QHash<QChar, Node_p *> d;
+    QMap<QChar, Node_p *> d;
 
     bool isEnd;
 

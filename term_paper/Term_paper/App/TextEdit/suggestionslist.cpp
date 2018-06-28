@@ -91,6 +91,7 @@ void SuggestionsList::on_itemActivated(QListWidgetItem *item)
 SuggestionsList::SuggestionsList(QTextEdit *parent) :
     QListWidget(parent)
 {
+    setSortingEnabled(true);
     setTabKeyNavigation(true);
     setFocusPolicy(Qt::StrongFocus);
     setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);

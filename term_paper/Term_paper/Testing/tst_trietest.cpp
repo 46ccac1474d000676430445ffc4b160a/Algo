@@ -95,12 +95,30 @@ void TrieTest::test_remove()
         words << buf;
     }
 
+    QFile f(":/dict.txt");
+    if (f.open(QIODevice::ReadOnly))
+    {
+        QString buf(f.readAll());
+        buf.remove('\r');
+
+        words = buf.split('\n');
+
+        f.close();
+    }
+    else
+    {
+        QWARN("dict.txt not open");
+        return;
+    }
+
     Trie trie;
 
     foreach (const QString &word, words)
     {
         trie.addWord(word);
     }
+
+    QStringList __temp = trie.words(QString());
 
     int c = 0;
     foreach (const QString &word, words)
