@@ -22,49 +22,57 @@ TrieTest::TrieTest()
 
 void TrieTest::test_contains_addWord()
 {
-    try
+    QStringList words;
+    QString buf;
+
+    for (int i = 'a'; i <= 'z'; i++)
     {
-        QStringList words;
-
-        QFile f(":/dict.txt");
-        if (f.open(QIODevice::ReadOnly))
-        {
-            QString buf(f.readAll());
-            buf.remove('\r');
-
-            words = buf.split('\n');
-
-            f.close();
-        }
-        else
-        {
-            QWARN("dict.txt not open");
-            return;
-        }
-
-        Trie trie;
-
-        foreach (QString word, words)
-        {
-            QCOMPARE(trie.contains(word), false);
-        }
-
-        foreach (QString word, words)
-        {
-            if (trie.contains(word)) qWarning() << "trie already contains:" << word;
-            QCOMPARE(trie.contains(word), false);
-            trie.addWord(word);
-            QCOMPARE(trie.contains(word), true);
-        }
-
-        foreach (QString word, words)
-        {
-            QCOMPARE(trie.contains(word), true);
-        }
+        buf.append(QChar(i));
+        words << buf;
     }
-    catch(std::invalid_argument e)
+
+    buf.clear();
+    QString ru = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
+    for (int i = 0; i < ru.size(); i++)
     {
-        qWarning() << e.what();
+        buf.append(ru[i]);
+        words << buf;
+    }
+
+    QFile f(":/dict.txt");
+    if (f.open(QIODevice::ReadOnly))
+    {
+        QString buf(f.readAll());
+        buf.remove('\r');
+
+        words = buf.split('\n');
+
+        f.close();
+    }
+    else
+    {
+        QWARN("dict.txt not open");
+        return;
+    }
+
+    Trie trie;
+
+    foreach (QString word, words)
+    {
+        QCOMPARE(trie.contains(word), false);
+    }
+
+    foreach (QString word, words)
+    {
+        if (trie.contains(word)) qWarning() << "trie already contains:" << word;
+        QCOMPARE(trie.contains(word), false);
+        trie.addWord(word);
+        QCOMPARE(trie.contains(word), true);
+    }
+
+    foreach (QString word, words)
+    {
+        QCOMPARE(trie.contains(word), true);
     }
 }
 
@@ -93,8 +101,6 @@ void TrieTest::test_remove()
     {
         trie.addWord(word);
     }
-
-    QStringList __temp = trie.words(QString());
 
     int c = 0;
     foreach (const QString &word, words)

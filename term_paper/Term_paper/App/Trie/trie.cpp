@@ -37,7 +37,8 @@ Node_p *Node_p::at(const QChar &c) const
 
 bool Node_p::isEmpty() const
 {
-    return d.isEmpty() || !isEnd;
+    if (!d.isEmpty()) return false;
+    return !isEnd;
 }
 
 void Node_p::set(const QChar &c, Node_p *node)
